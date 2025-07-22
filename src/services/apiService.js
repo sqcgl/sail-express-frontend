@@ -4,11 +4,8 @@ const API_BASE_URL =
 
 // 通用API请求函数
 const apiRequest = async (endpoint, options = {}) => {
-  // 确保URL格式正确，避免双斜杠
-  const baseUrl = API_BASE_URL.endsWith("/")
-    ? API_BASE_URL.slice(0, -1)
-    : API_BASE_URL;
-  const url = `${baseUrl}/api${endpoint}`;
+  // 对于Netlify Functions，直接使用endpoint，不需要/api前缀
+  const url = `${API_BASE_URL}${endpoint}`;
 
   const defaultOptions = {
     headers: {
@@ -52,19 +49,19 @@ const apiRequest = async (endpoint, options = {}) => {
 export const productAPI = {
   // 获取所有产品
   getAllProducts: async (language = "zh") => {
-    return await apiRequest(`/products?language=${language}`);
+    return await apiRequest(`/api/products?language=${language}`);
   },
 
   // 根据分类获取产品
   getProductsByCategory: async (category, language = "zh") => {
     return await apiRequest(
-      `/products/category/${category}?language=${language}`
+      `/api/products/category/${category}?language=${language}`
     );
   },
 
   // 根据ID获取产品
   getProductById: async (id, language = "zh") => {
-    return await apiRequest(`/products/${id}?language=${language}`);
+    return await apiRequest(`/api/products/${id}?language=${language}`);
   },
 
   // 添加产品 (需要API密钥)
