@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
+import logoImage from "../assets/logo-transparent.png";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,10 +60,11 @@ const Navigation = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
-              <div className="w-12 h-12 bg-gradient-to-br from-[#002366] to-[#1e40af] rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                <span className="text-white font-bold text-xl">SE</span>
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-br from-[#002366]/30 to-[#1e40af]/30 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <img
+                src={logoImage}
+                alt="Sail Express Logo"
+                className="h-12 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+              />
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-[#002366] to-[#1e40af] bg-clip-text text-transparent">

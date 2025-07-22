@@ -307,29 +307,28 @@ export default {
     hero: {
       title: "About Us",
       subtitle:
-        "Sail Express is a professional sushi and seafood restaurant wholesale supplier, committed to providing the highest quality ingredients and tools for sushi restaurants. We have rich industry experience and a professional service team, and we are your trusted partner.",
+        "Sail Express is a professional seafood and Japanese restaurant ingredient wholesale supplier, committed to providing the highest quality seafood and Japanese ingredients for restaurants. We have rich industry experience and a professional service team, and we are your trusted partner.",
     },
     company: {
       title: "Company Profile",
       paragraph1:
-        "Sail Express was established in 2010, focusing on ingredient supply for sushi and seafood restaurants. We deeply understand the strict requirements for ingredient quality in sushi making, so we have established a strict supplier screening and quality control system.",
+        "Sail Express was established in 2020, headquartered in Queens, New York, specializing in professional seafood and Japanese restaurant ingredient wholesale services for restaurants in Upstate New York, Pennsylvania, Philadelphia, Connecticut, and surrounding areas. We deeply understand the strict requirements for ingredient freshness and quality in Japanese cuisine, so we have established a comprehensive supplier screening, quality control, and time management system.",
       paragraph2:
-        "After more than ten years of development, we have become a well-known wholesaler in the industry, serving more than 500 sushi restaurants and seafood restaurants, with annual revenue exceeding 50 million yuan.",
+        "After several years of development, we have become a well-known seafood and Japanese restaurant ingredient wholesaler in the New York region, serving over 200 restaurants with stable ingredient supply, with annual revenue exceeding $5 million.",
       paragraph3:
-        "Our mission is to enable every sushi restaurant to obtain the highest quality ingredients and provide customers with the most delicious sushi experience.",
+        "Our mission is to help every restaurant obtain the highest quality ingredients through professional seafood and Japanese ingredient wholesale services, providing customers with the most authentic dining experience.",
       stats: [
-        { number: "500+", label: "Partners" },
-        { number: "1000+", label: "Products" },
-        { number: "13 Years", label: "Experience" },
+        { number: "200+", label: "Restaurant Partners" },
+        { number: "1000+", label: "Seafood & Japanese Ingredient Categories" },
+        { number: "3+ Years", label: "Professional Experience" },
       ],
       advantages: {
         title: "Our Advantages",
         items: [
-          "✓ Strict quality control system",
-          "✓ Professional cold chain logistics delivery",
+          "✓ Professional delivery network covering Upstate New York, Pennsylvania, Philadelphia, Connecticut, and surrounding areas",
+          "✓ Strict seafood and Japanese ingredient quality control system",
+          "✓ Professional delivery fleet equipped with top-tier refrigeration systems",
           "✓ 24-hour customer service support",
-          "✓ Flexible procurement plan customization",
-          "✓ Stable supplier partnership",
         ],
       },
     },
@@ -337,24 +336,24 @@ export default {
       title: "Development History",
       items: [
         {
-          year: "2010",
+          year: "2020",
           title: "Company Founded",
-          desc: "Established in Shenzhen, began focusing on sushi ingredient wholesale",
+          desc: "Established in Queens, New York, began focusing on seafood and Japanese ingredient wholesale",
         },
         {
-          year: "2015",
+          year: "2021",
           title: "Business Expansion",
-          desc: "Served over 100 clients, annual revenue exceeded 10 million",
+          desc: "Served over 50 restaurants, established professional delivery network",
         },
         {
-          year: "2018",
+          year: "2022",
           title: "Quality Upgrade",
-          desc: "Established complete quality traceability system, obtained ISO certification",
+          desc: "Established complete quality control system, gained customer trust",
         },
         {
           year: "2023",
-          title: "Digital Transformation",
-          desc: "Launched online procurement platform, achieved full-process digital management",
+          title: "Scale Development",
+          desc: "Served over 200 restaurants, annual revenue exceeded $5 million",
         },
       ],
     },
@@ -362,19 +361,19 @@ export default {
       title: "Core Team",
       members: [
         {
-          name: "Zhang Haiyang",
+          name: "Michael Chen",
           position: "Founder & CEO",
-          desc: "15 years of seafood industry experience, former executive of multiple well-known seafood companies",
+          desc: "10 years of seafood and Japanese ingredient industry experience, specializing in New York restaurant supply chain management",
         },
         {
-          name: "Li Meiling",
+          name: "Sarah Johnson",
           position: "Procurement Director",
-          desc: "Professional procurer, responsible for supplier management and product quality control",
+          desc: "Professional procurer, responsible for supplier management and seafood quality control",
         },
         {
-          name: "Wang Jianguo",
+          name: "David Rodriguez",
           position: "Operations Director",
-          desc: "Responsible for logistics delivery and customer service, ensuring timely product delivery",
+          desc: "Responsible for logistics delivery and customer service, ensuring fresh ingredient delivery",
         },
       ],
     },
@@ -382,7 +381,7 @@ export default {
       title: "Partners",
       client: "Client",
       description:
-        "We have established long-term partnerships with many well-known sushi chains and high-end seafood restaurants",
+        "We have established long-term partnerships with many well-known Japanese restaurant chains and high-end seafood restaurants",
       learnMore: "Learn More About Client Cases",
     },
   },

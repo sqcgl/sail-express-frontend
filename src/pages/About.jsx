@@ -1,5 +1,6 @@
 import React from "react";
 import { useLanguage } from "../contexts/LanguageContext";
+import PartnersBanner from "../components/PartnersBanner";
 
 const About = () => {
   const { t } = useLanguage();
@@ -152,88 +153,8 @@ const About = () => {
         </div>
       </section>
 
-      {/* 团队介绍 */}
-      <section className="w-full py-20 bg-white relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-ocean-50/20 to-transparent"></div>
-        <div className="w-full max-w-none px-4 sm:px-6 lg:px-8 relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center text-ocean-900 mb-16">
-            <span className="bg-gradient-to-r from-ocean-900 to-sea-700 bg-clip-text text-transparent">
-              {t("about.team.title")}
-            </span>
-          </h2>
-
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-              {t("about.team.members").map((member, index) => (
-                <div
-                  key={index}
-                  className="group text-center bg-gradient-to-br from-white/80 to-blue-50/80 backdrop-blur-md rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 relative overflow-hidden hover:border-2 hover:border-[#002366]/30"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#002366]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <div className="relative z-10">
-                    <div className="w-24 h-24 bg-gradient-to-br from-[#002366] to-[#1e40af] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                      <span className="text-white text-2xl font-bold">
-                        {member.name.charAt(0)}
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-bold text-ocean-900 mb-2">
-                      {member.name}
-                    </h3>
-                    <p className="text-ocean-700 font-medium mb-4">
-                      {member.position}
-                    </p>
-                    <p className="text-ocean-600 leading-relaxed">
-                      {member.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 合作客户 */}
-      <section className="w-full py-20 bg-gradient-to-br from-ocean-50 to-sea-50 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,35,102,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,35,102,0.05)_1px,transparent_1px)] bg-[size:25px_25px]"></div>
-
-        <div className="w-full max-w-none px-4 sm:px-6 lg:px-8 relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center text-ocean-900 mb-16">
-            <span className="bg-gradient-to-r from-ocean-900 to-sea-700 bg-clip-text text-transparent">
-              {t("about.clients.title")}
-            </span>
-          </h2>
-
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
-              {Array.from({ length: 12 }, (_, index) => (
-                <div
-                  key={index}
-                  className="group bg-white/80 backdrop-blur-md rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center hover:border-2 hover:border-[#002366]/30"
-                >
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <span className="text-ocean-700 font-bold text-lg">
-                      {t("about.clients.client")}
-                      {index + 1}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="text-center mt-12">
-              <p className="text-lg text-ocean-700 mb-8">
-                {t("about.clients.description")}
-              </p>
-              <button className="group bg-gradient-to-r from-[#002366] to-[#1e40af] hover:from-[#1e40af] hover:to-[#002366] text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:scale-105">
-                <span className="relative z-10">
-                  {t("about.clients.learnMore")}
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 合作伙伴滚动Banner */}
+      <PartnersBanner />
     </div>
   );
 };
