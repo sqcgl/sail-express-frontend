@@ -75,8 +75,7 @@ const Products = () => {
       setLoading(true);
       const response = await fetch(
         `${
-          import.meta.env.VITE_API_BASE_URL ||
-          "https://sail-express-backend.netlify.app"
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3001"
         }/api/products?language=${language}`
       );
       const data = await response.json();

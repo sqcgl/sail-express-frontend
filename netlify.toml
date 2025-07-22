@@ -13,18 +13,4 @@
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200
-
-[context.production.environment]
-  VITE_API_BASE_URL = "https://sail-express-backend.netlify.app"
-  VITE_EMAILJS_SERVICE_ID = "service_2pvwjlu"
-  VITE_EMAILJS_TEMPLATE_ID = "template_zsvj9hf"
-  VITE_EMAILJS_PUBLIC_KEY = "TbjT6n2_nnUAvsSbf"
-  VITE_API_KEY = "your-secret-key-12345"
-
-[context.deploy-preview.environment]
-  VITE_API_BASE_URL = "https://sail-express-backend.netlify.app"
-  VITE_EMAILJS_SERVICE_ID = "service_2pvwjlu"
-  VITE_EMAILJS_TEMPLATE_ID = "template_zsvj9hf"
-  VITE_EMAILJS_PUBLIC_KEY = "TbjT6n2_nnUAvsSbf"
-  VITE_API_KEY = "your-secret-key-12345" 
+  status = 200 
