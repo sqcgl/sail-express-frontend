@@ -1,6 +1,7 @@
 // API服务配置
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3001";
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://sail-express-backend.vercel.app";
 
 // 通用API请求函数
 const apiRequest = async (endpoint, options = {}) => {
@@ -173,7 +174,10 @@ export const getImageUrl = (imagePath) => {
   }
 
   // 拼接后端图片URL
-  return `http://localhost:3001${imagePath}`;
+  const baseUrl =
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://sail-express-backend.vercel.app";
+  return `${baseUrl}${imagePath}`;
 };
 
 export default {
