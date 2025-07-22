@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getImageUrl } from "../services/apiService";
 import ProductDetailCard from "../components/ProductDetailCard";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useCart } from "../contexts/CartContext";
 
 // 模拟产品数据
 const mockProducts = [
@@ -56,6 +57,7 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const { t, language } = useLanguage();
+  const { addToCart } = useCart();
 
   const categories = [
     { id: "fresh", name: t("products.categories.fresh") },
@@ -131,8 +133,9 @@ const Products = () => {
 
   // 添加到购物车
   const handleAddToCart = (product) => {
-    // 这里可以实现购物车功能
-    // 可以存储到 localStorage 或发送到后端
+    addToCart(product);
+    // 显示成功提示
+    alert(`${product.name} ${t("products.addedToCart")}`);
   };
 
   // 清空筛选
