@@ -4,7 +4,11 @@ const API_BASE_URL =
 
 // 通用API请求函数
 const apiRequest = async (endpoint, options = {}) => {
-  const url = `${API_BASE_URL}/api${endpoint}`;
+  // 确保URL格式正确，避免双斜杠
+  const baseUrl = API_BASE_URL.endsWith("/")
+    ? API_BASE_URL.slice(0, -1)
+    : API_BASE_URL;
+  const url = `${baseUrl}/api${endpoint}`;
 
   const defaultOptions = {
     headers: {
