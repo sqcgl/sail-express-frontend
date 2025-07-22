@@ -170,15 +170,34 @@ export const getImageUrl = (imagePath) => {
     return "/placeholder.jpg"; // 默认占位图片
   }
 
+  // 如果是Base64图片数据，直接返回
+  if (imagePath.startsWith("data:")) {
+    return imagePath;
+  }
+
   if (imagePath.startsWith("http")) {
     return imagePath; // 已经是完整URL
   }
 
-  // 拼接后端图片URL
+  // 在Netlify Functions环境中，图片实际上不存在
+  // 返回一个占位图片或默认图片
+  if (imagePath.startsWith("/uploads/")) {
+    // 使用一个公开的占位图片服务
+    return `https://via.placeholder.com/400x400/3B82F6/FFFFFF?text=Product+Image`;
+  }
+
+  // 拼接后端图片URL（用于其他类型的图片）
   const baseUrl =
     import.meta.env.VITE_API_BASE_URL ||
     "https://sail-express-backend.netlify.app";
-  return `${baseUrl}${imagePath}`;
+
+  // 确保URL拼接正确，避免双斜杠
+  const cleanBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+  const cleanImagePath = imagePath.startsWith("/")
+    ? imagePath
+    : `/${imagePath}`;
+
+  return `${cleanBaseUrl}${cleanImagePath}`;
 };
 
 export default {
