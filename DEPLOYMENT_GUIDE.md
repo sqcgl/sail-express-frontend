@@ -1,279 +1,154 @@
-# 🚀 Sail Express 部署指南
+# Sail Express 部署指南
 
-## 📋 部署前准备
+## 🚀 推荐部署方案：Netlify
 
-### ✅ 已完成
+### **前端部署到 Netlify**
 
-- [x] 前端构建测试通过
-- [x] 后端服务器正常运行
-- [x] 环境变量配置完成
-- [x] 代码清理完成
-- [x] 部署配置文件创建
-
-### 🔧 需要配置
-
-- [ ] 选择部署平台
-- [ ] 配置生产环境变量
-- [ ] 设置域名（可选）
-- [ ] 配置 SSL 证书
-- [ ] 设置后端 API 地址
-
----
-
-## 🎯 部署平台选择
-
-### 1. **Vercel（推荐）**
-
-**优点**：
-
-- 免费计划
-- 自动 CI/CD
-- 全球 CDN
-- 简单易用
-- 支持环境变量
-
-**部署步骤**：
-
-1. 注册 [Vercel](https://vercel.com) 账户
-2. 连接 GitHub 仓库
-3. 配置环境变量
-4. 自动部署
-
-### 2. **Netlify**
-
-**优点**：
-
-- 免费计划
-- 自动部署
-- 表单处理
-- 函数支持
-
-**部署步骤**：
-
-1. 注册 [Netlify](https://netlify.com) 账户
-2. 连接 GitHub 仓库
-3. 配置构建设置
-4. 设置环境变量
-
-### 3. **Railway**
-
-**优点**：
-
-- 全栈部署
-- 前后端一体化
-- 数据库支持
-- 简单配置
-
-**部署步骤**：
-
-1. 注册 [Railway](https://railway.app) 账户
-2. 创建新项目
-3. 连接 GitHub 仓库
-4. 配置环境变量
-
-### 4. **Docker + 云服务器**
-
-**优点**：
-
-- 完全控制
-- 自定义配置
-- 成本可控
-
-**部署步骤**：
-
-1. 构建 Docker 镜像
-2. 上传到云服务器
-3. 配置 Nginx
-4. 设置域名和 SSL
-
----
-
-## 🔧 环境变量配置
-
-### 生产环境变量
+#### **步骤 1：准备代码**
 
 ```bash
-# 后端API地址（生产环境）
-VITE_API_BASE_URL=https://your-backend-domain.com
-
-# EmailJS配置（生产环境）
-VITE_EMAILJS_SERVICE_ID=your_production_service_id
-VITE_EMAILJS_TEMPLATE_ID=your_production_template_id
-VITE_EMAILJS_PUBLIC_KEY=your_production_public_key
-
-# API密钥（生产环境）
-VITE_API_KEY=your_production_api_key
+# 确保代码已提交到GitHub
+git add .
+git commit -m "Prepare for Netlify deployment"
+git push
 ```
 
-### 获取 EmailJS 生产环境配置
+#### **步骤 2：连接 Netlify**
 
-1. 登录 [EmailJS](https://www.emailjs.com/)
-2. 创建生产环境服务
-3. 创建生产环境模板
-4. 获取配置信息
+1. 访问 [netlify.com](https://netlify.com)
+2. 点击 "New site from Git"
+3. 选择 GitHub
+4. 选择 `sail-express-frontend` 仓库
+5. 配置构建设置：
+   - **Build command**: `npm run build`
+   - **Publish directory**: `dist`
+   - **Node version**: `18`
 
----
+#### **步骤 3：配置环境变量**
 
-## 🚀 部署步骤
+在 Netlify 的 "Site settings" → "Environment variables" 中添加：
 
-### Vercel 部署
+```
+VITE_API_BASE_URL = https://sail-express-backend.netlify.app
+VITE_EMAILJS_SERVICE_ID = service_2pvwjlu
+VITE_EMAILJS_TEMPLATE_ID = template_zsvj9hf
+VITE_EMAILJS_PUBLIC_KEY = TbjT6n2_nnUAvsSbf
+VITE_API_KEY = your-secret-key-12345
+```
 
-1. **安装 Vercel CLI**
+#### **步骤 4：部署**
+
+1. 点击 "Deploy site"
+2. 等待构建完成
+3. 获得域名：`https://your-site-name.netlify.app`
+
+### **后端部署到 Netlify Functions**
+
+#### **步骤 1：创建后端项目**
 
 ```bash
-npm install -g vercel
+# 创建新的后端仓库
+git clone https://github.com/your-username/sail-express-backend
+cd sail-express-backend
 ```
 
-2. **登录 Vercel**
+#### **步骤 2：配置 Netlify Functions**
 
-```bash
-vercel login
+创建 `netlify.toml`：
+
+```toml
+[build]
+  functions = "functions"
+  publish = "public"
+
+[functions]
+  directory = "functions"
 ```
 
-3. **部署项目**
+#### **步骤 3：部署后端**
 
-```bash
-vercel
-```
-
-4. **配置环境变量**
-
-```bash
-vercel env add VITE_API_BASE_URL
-vercel env add VITE_EMAILJS_SERVICE_ID
-vercel env add VITE_EMAILJS_TEMPLATE_ID
-vercel env add VITE_EMAILJS_PUBLIC_KEY
-vercel env add VITE_API_KEY
-```
-
-5. **重新部署**
-
-```bash
-vercel --prod
-```
-
-### Netlify 部署
-
-1. **连接 GitHub 仓库**
-2. **配置构建设置**：
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-3. **设置环境变量**
-4. **部署**
-
-### Railway 部署
-
-1. **创建新项目**
-2. **连接 GitHub 仓库**
-3. **配置环境变量**
-4. **自动部署**
-
----
-
-## 🔗 后端部署
-
-### 选项 1：Railway（推荐）
-
-1. 创建新 Railway 项目
-2. 连接后端 GitHub 仓库
-3. 配置环境变量
-4. 自动部署
-
-### 选项 2：Heroku
-
-1. 创建 Heroku 应用
-2. 连接 GitHub 仓库
+1. 将后端代码推送到 GitHub
+2. 在 Netlify 中创建新站点
 3. 配置环境变量
 4. 部署
 
-### 选项 3：云服务器
+### **域名配置**
 
-1. 购买云服务器
-2. 安装 Node.js
-3. 上传代码
-4. 配置 PM2
-5. 设置 Nginx
+#### **自定义域名**
 
----
+1. 在 Netlify 中点击 "Domain settings"
+2. 添加自定义域名
+3. 配置 DNS 记录
 
-## 🌐 域名和 SSL 配置
+#### **SSL 证书**
 
-### 域名购买
+- Netlify 自动提供 SSL 证书
+- 无需额外配置
 
-推荐域名注册商：
+### **环境变量说明**
 
-- [Namecheap](https://www.namecheap.com/)
-- [GoDaddy](https://www.godaddy.com/)
-- [阿里云](https://wanwang.aliyun.com/)
+| 变量名                     | 说明            | 示例值                                     |
+| -------------------------- | --------------- | ------------------------------------------ |
+| `VITE_API_BASE_URL`        | 后端 API 地址   | `https://sail-express-backend.netlify.app` |
+| `VITE_EMAILJS_SERVICE_ID`  | EmailJS 服务 ID | `service_2pvwjlu`                          |
+| `VITE_EMAILJS_TEMPLATE_ID` | EmailJS 模板 ID | `template_zsvj9hf`                         |
+| `VITE_EMAILJS_PUBLIC_KEY`  | EmailJS 公钥    | `TbjT6n2_nnUAvsSbf`                        |
+| `VITE_API_KEY`             | API 密钥        | `your-secret-key-12345`                    |
 
-### SSL 证书
+### **部署后检查**
 
-- **Vercel/Netlify**：自动 SSL
-- **Railway**：自动 SSL
-- **云服务器**：Let's Encrypt
+#### **前端检查**
 
----
+- ✅ 网站正常访问
+- ✅ 产品列表显示
+- ✅ 语言切换功能
+- ✅ 联系表单工作
 
-## 📊 部署后检查
+#### **后端检查**
 
-### 1. **功能测试**
+- ✅ API 健康检查
+- ✅ 产品 CRUD 操作
+- ✅ 图片上传功能
+- ✅ 多语言支持
 
-- [ ] 首页加载正常
-- [ ] 产品展示正常
-- [ ] 多语言切换正常
-- [ ] 产品管理功能正常
-- [ ] 图片上传正常
-- [ ] 邮件发送正常
+### **故障排除**
 
-### 2. **性能测试**
+#### **常见问题**
 
-- [ ] 页面加载速度
-- [ ] 图片加载速度
-- [ ] API 响应速度
-- [ ] 移动端体验
+1. **构建失败**：检查 Node 版本和依赖
+2. **API 连接失败**：确认环境变量配置
+3. **图片不显示**：检查图片路径和权限
 
-### 3. **安全测试**
+#### **调试方法**
 
-- [ ] HTTPS 正常工作
-- [ ] API 密钥保护
-- [ ] 文件上传安全
-- [ ] 跨域配置正确
+1. 查看 Netlify 构建日志
+2. 检查浏览器控制台错误
+3. 验证 API 端点可访问性
 
----
+### **性能优化**
 
-## 🔧 故障排除
+#### **前端优化**
 
-### 常见问题
+- 启用 Netlify 的 CDN
+- 配置缓存策略
+- 压缩静态资源
 
-**Q: 构建失败？**
-A: 检查 Node.js 版本、依赖安装、环境变量配置
+#### **后端优化**
 
-**Q: API 连接失败？**
-A: 确认后端服务器运行、CORS 配置、API 地址正确
-
-**Q: 图片无法显示？**
-A: 检查图片路径、上传目录权限、CDN 配置
-
-**Q: 邮件发送失败？**
-A: 验证 EmailJS 配置、模板设置、API 密钥
+- 使用 Netlify Functions 缓存
+- 优化数据库查询
+- 配置适当的超时时间
 
 ---
 
-## 📞 技术支持
+## 📝 部署完成检查清单
 
-### 部署平台支持
-
-- **Vercel**: [文档](https://vercel.com/docs)
-- **Netlify**: [文档](https://docs.netlify.com/)
-- **Railway**: [文档](https://docs.railway.app/)
-
-### 项目支持
-
-- 查看项目文档
-- 检查 GitHub Issues
-- 联系开发团队
-
----
-
-**最后更新**：2025 年 7 月 21 日  
-**版本**：1.0.0
+- [ ] 前端代码推送到 GitHub
+- [ ] Netlify 站点创建并连接
+- [ ] 环境变量配置完成
+- [ ] 构建成功
+- [ ] 网站可正常访问
+- [ ] 功能测试通过
+- [ ] 自定义域名配置（可选）
+- [ ] SSL 证书生效
+- [ ] 性能测试通过

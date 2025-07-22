@@ -3,6 +3,50 @@ import { getImageUrl } from "../services/apiService";
 import ProductDetailCard from "../components/ProductDetailCard";
 import { useLanguage } from "../contexts/LanguageContext";
 
+// 模拟产品数据
+const mockProducts = [
+  {
+    id: 1,
+    name_zh: "新鲜三文鱼",
+    name_en: "Fresh Salmon",
+    description_zh: "挪威进口新鲜三文鱼，肉质鲜美",
+    description_en: "Fresh Norwegian salmon with tender meat",
+    price: 88.0,
+    category: "fresh",
+    image: "/images/salmon.jpg",
+  },
+  {
+    id: 2,
+    name_zh: "冷冻虾仁",
+    name_en: "Frozen Shrimp",
+    description_zh: "优质冷冻虾仁，方便烹饪",
+    description_en: "Premium frozen shrimp, easy to cook",
+    price: 45.0,
+    category: "frozen",
+    image: "/images/shrimp.jpg",
+  },
+  {
+    id: 3,
+    name_zh: "干贝",
+    name_en: "Dried Scallops",
+    description_zh: "精选干贝，营养丰富",
+    description_en: "Selected dried scallops, rich in nutrition",
+    price: 120.0,
+    category: "dry",
+    image: "/images/scallops.jpg",
+  },
+  {
+    id: 4,
+    name_zh: "不锈钢锅具",
+    name_en: "Stainless Steel Cookware",
+    description_zh: "高品质不锈钢锅具套装",
+    description_en: "High-quality stainless steel cookware set",
+    price: 299.0,
+    category: "supply",
+    image: "/images/cookware.jpg",
+  },
+];
+
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +76,7 @@ const Products = () => {
       const response = await fetch(
         `${
           import.meta.env.VITE_API_BASE_URL ||
-          "https://sail-express-backend.vercel.app"
+          "https://sail-express-backend.netlify.app"
         }/api/products?language=${language}`
       );
       const data = await response.json();

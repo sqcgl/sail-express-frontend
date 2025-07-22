@@ -1,7 +1,7 @@
 // API服务配置
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
-  "https://sail-express-backend.vercel.app";
+  "https://sail-express-backend.netlify.app";
 
 // 通用API请求函数
 const apiRequest = async (endpoint, options = {}) => {
@@ -176,7 +176,7 @@ export const getImageUrl = (imagePath) => {
   // 拼接后端图片URL
   const baseUrl =
     import.meta.env.VITE_API_BASE_URL ||
-    "https://sail-express-backend.vercel.app";
+    "https://sail-express-backend.netlify.app";
   return `${baseUrl}${imagePath}`;
 };
 
