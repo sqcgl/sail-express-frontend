@@ -312,6 +312,9 @@ export default {
           "✓ 24小时客户服务支持",
         ],
       },
+      serviceArea: {
+        title: "服务区域",
+      },
     },
     timeline: {
       title: "发展历程",

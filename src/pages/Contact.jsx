@@ -127,17 +127,14 @@ const Contact = () => {
 
   return (
     <div className="w-full pt-20">
-      {/* 页面标题 - 海洋蓝色主题 */}
-      <section className="w-full py-20 bg-gradient-to-bl from-white via-blue-50 to-[#002366] relative overflow-hidden">
+      {/* 页面标题 - 蓝底白字渐变背景 */}
+      <section className="w-full py-20 bg-gradient-to-br from-[#002366] via-[#1e40af] to-[#3b82f6] relative overflow-hidden">
         {/* 科技感背景几何图形 */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-10 left-1/4 w-40 h-40 bg-[#002366]/20 rounded-full blur-2xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-1/4 w-32 h-32 bg-[#002366]/30 rounded-full blur-xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-[#002366]/25 rounded-full blur-lg animate-pulse delay-500"></div>
+          <div className="absolute top-10 left-1/4 w-40 h-40 bg-white/10 rounded-full blur-2xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-1/4 w-32 h-32 bg-white/15 rounded-full blur-xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-white/12 rounded-full blur-lg animate-pulse delay-500"></div>
         </div>
-
-        {/* 网格背景 */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,35,102,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(0,35,102,0.08)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
 
         <div className="w-full max-w-none px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-4xl mx-auto">

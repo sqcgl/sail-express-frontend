@@ -331,6 +331,9 @@ export default {
           "✓ 24-hour customer service support",
         ],
       },
+      serviceArea: {
+        title: "Service Area",
+      },
     },
     timeline: {
       title: "Development History",
