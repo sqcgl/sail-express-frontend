@@ -84,6 +84,8 @@ export default {
     noImage: "暂无图片",
     showing: "显示",
     items: "个产品",
+    goToInquiry: "前往询价",
+    itemsInCart: "购物车中有 {count} 个商品",
   },
 
   // 购物车

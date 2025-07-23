@@ -86,6 +86,8 @@ export default {
     noImage: "No Image",
     showing: "Showing",
     items: "products",
+    goToInquiry: "Go to Inquiry",
+    itemsInCart: "{count} items in cart",
   },
 
   // Cart

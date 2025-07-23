@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getImageUrl } from "../services/apiService";
 import ProductDetailCard from "../components/ProductDetailCard";
+import FloatingCartIcon from "../components/FloatingCartIcon";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCart } from "../contexts/CartContext";
 
@@ -342,6 +343,9 @@ const Products = () => {
           onClose={handleCloseDetail}
           onAddToCart={handleAddToCart}
         />
+
+        {/* 浮动购物车图标 */}
+        <FloatingCartIcon />
       </div>
     </div>
   );
