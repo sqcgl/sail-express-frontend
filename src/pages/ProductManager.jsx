@@ -35,6 +35,14 @@ const ProductManager = () => {
 
   const API_KEY = import.meta.env.VITE_API_KEY || "your-secret-key-12345"; // 后端配置的API密钥
 
+  // 获取产品显示名称 - 优先显示中文名称，如果没有则显示英文名称
+  const getProductDisplayName = (product) => {
+    if (product.name_zh && product.name_zh.trim()) {
+      return product.name_zh;
+    }
+    return product.name_en || product.name || "未命名产品";
+  };
+
   // 获取所有产品
   const fetchProducts = async () => {
     try {
@@ -59,13 +67,13 @@ const ProductManager = () => {
   const handleAddProduct = async (e) => {
     e.preventDefault();
 
+    // 修改验证逻辑：中文名称不再是必填项，但英文名称仍然是必填的
     if (
-      !newProduct.name_zh ||
       !newProduct.name_en ||
       !newProduct.price ||
       !newProduct.category
     ) {
-      alert("请填写所有必填字段（中文名称、英文名称、价格、分类）");
+      alert("请填写所有必填字段（英文名称、价格、分类）");
       return;
     }
 
@@ -100,7 +108,8 @@ const ProductManager = () => {
   };
 
   // 删除产品
-  const handleDeleteProduct = async (productId, productName) => {
+  const handleDeleteProduct = async (productId, product) => {
+    const productName = getProductDisplayName(product);
     if (!confirm(`确定要删除产品 "${productName}" 吗？`)) {
       return;
     }
@@ -183,12 +192,11 @@ const ProductManager = () => {
     e.preventDefault();
 
     if (
-      !editingProduct.name_zh ||
       !editingProduct.name_en ||
       !editingProduct.price ||
       !editingProduct.category
     ) {
-      alert("请填写所有必填字段（中文名称、英文名称、价格、分类）");
+      alert("请填写所有必填字段（英文名称、价格、分类）");
       return;
     }
 
@@ -314,7 +322,7 @@ const ProductManager = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-ocean-700 mb-2">
-                      中文名称 *
+                      中文名称
                     </label>
                     <input
                       type="text"
@@ -326,8 +334,7 @@ const ProductManager = () => {
                         })
                       }
                       className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
-                      placeholder="输入中文名称"
-                      required
+                      placeholder="输入中文名称（可选）"
                     />
                   </div>
                   <div>
@@ -459,7 +466,7 @@ const ProductManager = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-ocean-700 mb-2">
-                      中文名称 *
+                      中文名称
                     </label>
                     <input
                       type="text"
@@ -471,8 +478,7 @@ const ProductManager = () => {
                         })
                       }
                       className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
-                      placeholder="输入中文名称"
-                      required
+                      placeholder="输入中文名称（可选）"
                     />
                   </div>
                   <div>
@@ -684,7 +690,7 @@ const ProductManager = () => {
                           {product.image ? (
                             <img
                               src={getImageUrl(product.image)}
-                              alt={product.name}
+                              alt={getProductDisplayName(product)}
                               className="w-16 h-16 object-cover rounded border"
                             />
                           ) : (
@@ -694,7 +700,7 @@ const ProductManager = () => {
                           )}
                         </td>
                         <td className="border border-ocean-200 px-4 py-2 font-medium">
-                          {product.name}
+                          {getProductDisplayName(product)}
                         </td>
                         <td className="border border-ocean-200 px-4 py-2">
                           <span className="inline-block bg-ocean-100 text-ocean-800 px-2 py-1 rounded-full text-xs font-medium">
@@ -721,7 +727,7 @@ const ProductManager = () => {
                             </button>
                             <button
                               onClick={() =>
-                                handleDeleteProduct(product.id, product.name)
+                                handleDeleteProduct(product.id, product)
                               }
                               className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition-colors"
                             >
