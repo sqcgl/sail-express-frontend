@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getImageUrl } from "../services/apiService";
+import { getImageUrl, productAPI, handleAPIError } from "../services/apiService";
 import ProductDetailCard from "../components/ProductDetailCard";
 import FloatingCartIcon from "../components/FloatingCartIcon";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -76,21 +76,10 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_API_BASE_URL ||
-          "https://web-production-c3853.up.railway.app"
-        }/api/products?language=${language}`
-      );
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setProducts(data.data);
-      } else {
-        throw new Error(data.message || "获取产品失败");
-      }
+      const response = await productAPI.getAllProducts(language);
+      setProducts(response.data);
     } catch (error) {
-      setError(error.message);
+      setError(handleAPIError(error));
       console.error("获取产品失败:", error);
     } finally {
       setLoading(false);
