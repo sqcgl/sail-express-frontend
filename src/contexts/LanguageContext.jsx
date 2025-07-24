@@ -30,7 +30,7 @@ export const LanguageProvider = ({ children }) => {
   };
 
   // 获取翻译文本
-  const t = (key) => {
+  const t = (key, params = {}) => {
     const keys = key.split(".");
     let value = translations;
 
@@ -41,6 +41,13 @@ export const LanguageProvider = ({ children }) => {
         console.warn(`Translation key not found: ${key}`);
         return key;
       }
+    }
+
+    // 如果value是字符串且包含参数占位符，则进行替换
+    if (typeof value === "string" && Object.keys(params).length > 0) {
+      return Object.keys(params).reduce((str, paramKey) => {
+        return str.replace(new RegExp(`{${paramKey}}`, "g"), params[paramKey]);
+      }, value);
     }
 
     return value;

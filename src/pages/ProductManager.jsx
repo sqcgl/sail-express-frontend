@@ -5,8 +5,10 @@ import {
   getImageUrl,
 } from "../services/apiService";
 import ImageUpload from "../components/ImageUpload";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const ProductManager = () => {
+  const { t } = useLanguage();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,10 +29,10 @@ const ProductManager = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const categories = [
-    { id: "fresh", name: "新鲜" },
-    { id: "frozen", name: "冷冻" },
-    { id: "dry", name: "干货" },
-    { id: "supply", name: "器具" },
+    { id: "fresh", name: t("products.categories.fresh") },
+    { id: "frozen", name: t("products.categories.frozen") },
+    { id: "dry", name: t("products.categories.dry") },
+    { id: "supply", name: t("products.categories.supply") },
   ];
 
   const API_KEY = import.meta.env.VITE_API_KEY || "your-secret-key-12345"; // 后端配置的API密钥
@@ -43,7 +45,7 @@ const ProductManager = () => {
     if (product.name_en && product.name_en.trim()) {
       return product.name_en;
     }
-    return product.name || "未命名产品";
+    return product.name || t("products.noData");
   };
 
   // 获取所有产品
@@ -55,7 +57,7 @@ const ProductManager = () => {
       if (response.success) {
         setProducts(response.data);
       } else {
-        setError("获取产品数据失败");
+        setError(t("products.error"));
       }
     } catch (error) {
       const errorMessage = handleAPIError(error);
@@ -72,7 +74,7 @@ const ProductManager = () => {
 
     // 修改验证逻辑：中文名称不再是必填项，但英文名称仍然是必填的
     if (!newProduct.name_en || !newProduct.price || !newProduct.category) {
-      alert("请填写所有必填字段（英文名称、价格、分类）");
+      alert(t("admin.form.validation.required"));
       return;
     }
 
@@ -84,7 +86,7 @@ const ProductManager = () => {
 
       const response = await productAPI.addProduct(productData, API_KEY);
       if (response.success) {
-        alert("产品添加成功！");
+        alert(t("admin.form.success.add"));
         setNewProduct({
           name_zh: "",
           name_en: "",
@@ -97,11 +99,11 @@ const ProductManager = () => {
         setShowAddForm(false);
         fetchProducts(); // 重新获取产品列表
       } else {
-        alert("产品添加失败");
+        alert(t("admin.form.error.add"));
       }
     } catch (error) {
       const errorMessage = handleAPIError(error);
-      alert(`添加失败: ${errorMessage}`);
+      alert(`${t("admin.form.error.add")}: ${errorMessage}`);
       console.error("添加产品失败:", error);
     }
   };
@@ -109,21 +111,21 @@ const ProductManager = () => {
   // 删除产品
   const handleDeleteProduct = async (productId, product) => {
     const productName = getProductDisplayName(product);
-    if (!confirm(`确定要删除产品 "${productName}" 吗？`)) {
+    if (!confirm(t("admin.form.confirm.delete", { name: productName }))) {
       return;
     }
 
     try {
       const response = await productAPI.deleteProduct(productId, API_KEY);
       if (response.success) {
-        alert("产品删除成功！");
+        alert(t("admin.form.success.delete"));
         fetchProducts(); // 重新获取产品列表
       } else {
-        alert("产品删除失败");
+        alert(t("admin.form.error.delete"));
       }
     } catch (error) {
       const errorMessage = handleAPIError(error);
-      alert(`删除失败: ${errorMessage}`);
+      alert(`${t("admin.form.error.delete")}: ${errorMessage}`);
       console.error("删除产品失败:", error);
     }
   };
@@ -167,17 +169,21 @@ const ProductManager = () => {
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategory === "all" || product.category === selectedCategory;
-    
+
     // 获取产品显示名称用于搜索
     const displayName = getProductDisplayName(product);
-    
+
     // 获取描述用于搜索（优先中文，其次英文，最后旧格式）
-    const description = product.description_zh || product.description_en || product.description || "";
-    
+    const description =
+      product.description_zh ||
+      product.description_en ||
+      product.description ||
+      "";
+
     const matchesSearch =
       displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       description.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     return matchesCategory && matchesSearch;
   });
 
@@ -202,7 +208,7 @@ const ProductManager = () => {
       !editingProduct.price ||
       !editingProduct.category
     ) {
-      alert("请填写所有必填字段（英文名称、价格、分类）");
+      alert(t("admin.form.validation.required"));
       return;
     }
 
@@ -218,17 +224,17 @@ const ProductManager = () => {
         API_KEY
       );
       if (response.success) {
-        alert("产品更新成功！");
+        alert(t("admin.form.success.update"));
         setEditingProduct(null);
         setEditImage(null);
         setShowEditForm(false);
         fetchProducts(); // 重新获取产品列表
       } else {
-        alert("产品更新失败");
+        alert(t("admin.form.error.update"));
       }
     } catch (error) {
       const errorMessage = handleAPIError(error);
-      alert(`更新失败: ${errorMessage}`);
+      alert(`${t("admin.form.error.update")}: ${errorMessage}`);
       console.error("更新产品失败:", error);
     }
   };
@@ -242,14 +248,16 @@ const ProductManager = () => {
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-ocean-900">产品管理</h1>
+            <h1 className="text-3xl font-bold text-ocean-900">
+              {t("admin.title")}
+            </h1>
             <div className="flex gap-3">
               {showEditForm && (
                 <button
                   onClick={handleCancelEdit}
                   className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors"
                 >
-                  取消编辑
+                  {t("common.cancel")}
                 </button>
               )}
               <button
@@ -262,7 +270,7 @@ const ProductManager = () => {
                 }}
                 className="bg-[#002366] text-white px-6 py-3 rounded-lg hover:bg-[#001a4d] transition-colors"
               >
-                {showAddForm ? "取消添加" : "添加产品"}
+                {showAddForm ? t("common.cancel") : t("admin.addProduct")}
               </button>
             </div>
           </div>
@@ -273,28 +281,30 @@ const ProductManager = () => {
               {/* 搜索框 */}
               <div>
                 <label className="block text-sm font-medium text-ocean-700 mb-2">
-                  搜索产品
+                  {t("products.search")}
                 </label>
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
-                  placeholder="输入产品名称或描述..."
+                  placeholder={t("products.search")}
                 />
               </div>
 
               {/* 分类筛选 */}
               <div>
                 <label className="block text-sm font-medium text-ocean-700 mb-2">
-                  按分类筛选
+                  {t("products.filter.title")}
                 </label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
                 >
-                  <option value="all">全部分类 ({categoryStats.all})</option>
+                  <option value="all">
+                    {t("products.filter.all")} ({categoryStats.all})
+                  </option>
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name} ({categoryStats[category.id] || 0})
@@ -312,7 +322,7 @@ const ProductManager = () => {
                   }}
                   className="w-full bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
                 >
-                  清空筛选
+                  {t("products.clearFilters")}
                 </button>
               </div>
             </div>
@@ -322,13 +332,13 @@ const ProductManager = () => {
           {showAddForm && (
             <div className="bg-blue-50 p-6 rounded-lg mb-6 border border-blue-200">
               <h2 className="text-xl font-bold text-ocean-900 mb-4">
-                添加新产品
+                {t("admin.addProduct")}
               </h2>
               <form onSubmit={handleAddProduct} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-ocean-700 mb-2">
-                      中文名称
+                      {t("admin.form.nameZh")}
                     </label>
                     <input
                       type="text"
@@ -340,12 +350,12 @@ const ProductManager = () => {
                         })
                       }
                       className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
-                      placeholder="输入中文名称（可选）"
+                      placeholder={t("admin.form.nameZhPlaceholder")}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-ocean-700 mb-2">
-                      英文名称 *
+                      {t("admin.form.nameEn")} *
                     </label>
                     <input
                       type="text"
@@ -357,13 +367,13 @@ const ProductManager = () => {
                         })
                       }
                       className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
-                      placeholder="输入英文名称"
+                      placeholder={t("admin.form.nameEnPlaceholder")}
                       required
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-ocean-700 mb-2">
-                      价格 *
+                      {t("admin.form.price")} *
                     </label>
                     <input
                       type="text"
@@ -372,14 +382,14 @@ const ProductManager = () => {
                         setNewProduct({ ...newProduct, price: e.target.value })
                       }
                       className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
-                      placeholder="例如: ¥180/kg"
+                      placeholder={t("admin.form.pricePlaceholder")}
                       required
                     />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-ocean-700 mb-2">
-                    分类 *
+                    {t("admin.form.category")} *
                   </label>
                   <select
                     value={newProduct.category}
@@ -399,7 +409,7 @@ const ProductManager = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-ocean-700 mb-2">
-                      中文描述
+                      {t("admin.form.descriptionZh")}
                     </label>
                     <textarea
                       value={newProduct.description_zh}
@@ -411,12 +421,12 @@ const ProductManager = () => {
                       }
                       className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
                       rows="3"
-                      placeholder="输入中文描述"
+                      placeholder={t("admin.form.descriptionZhPlaceholder")}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-ocean-700 mb-2">
-                      英文描述
+                      {t("admin.form.descriptionEn")}
                     </label>
                     <textarea
                       value={newProduct.description_en}
@@ -428,13 +438,13 @@ const ProductManager = () => {
                       }
                       className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
                       rows="3"
-                      placeholder="输入英文描述"
+                      placeholder={t("admin.form.descriptionEnPlaceholder")}
                     />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-ocean-700 mb-2">
-                    产品图片
+                    {t("admin.form.image")}
                   </label>
                   <ImageUpload
                     currentImage={null}
@@ -448,14 +458,14 @@ const ProductManager = () => {
                     type="submit"
                     className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
                   >
-                    添加产品
+                    {t("admin.addProduct")}
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowAddForm(false)}
                     className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors"
                   >
-                    取消
+                    {t("common.cancel")}
                   </button>
                 </div>
               </form>
@@ -466,7 +476,7 @@ const ProductManager = () => {
           {showEditForm && editingProduct && (
             <div className="bg-green-50 p-6 rounded-lg mb-6 border border-green-200">
               <h2 className="text-xl font-bold text-ocean-900 mb-4">
-                编辑产品
+                {t("admin.editProduct")}
               </h2>
               <form onSubmit={handleUpdateProduct} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -493,7 +503,9 @@ const ProductManager = () => {
                     </label>
                     <input
                       type="text"
-                      value={editingProduct.name_en || editingProduct.name || ""}
+                      value={
+                        editingProduct.name_en || editingProduct.name || ""
+                      }
                       onChange={(e) =>
                         setEditingProduct({
                           ...editingProduct,
@@ -572,7 +584,11 @@ const ProductManager = () => {
                       英文描述
                     </label>
                     <textarea
-                      value={editingProduct.description_en || editingProduct.description || ""}
+                      value={
+                        editingProduct.description_en ||
+                        editingProduct.description ||
+                        ""
+                      }
                       onChange={(e) =>
                         setEditingProduct({
                           ...editingProduct,
@@ -619,9 +635,14 @@ const ProductManager = () => {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-xl font-bold text-ocean-900">产品列表</h2>
+                <h2 className="text-xl font-bold text-ocean-900">
+                  {t("admin.table.title")}
+                </h2>
                 <p className="text-sm text-ocean-600 mt-1">
-                  显示 {filteredProducts.length} / {products.length} 个产品
+                  {t("admin.table.showing", {
+                    filtered: filteredProducts.length,
+                    total: products.length,
+                  })}
                 </p>
               </div>
               <button
@@ -629,7 +650,7 @@ const ProductManager = () => {
                 disabled={loading}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
               >
-                {loading ? "刷新中..." : "刷新列表"}
+                {loading ? t("common.loading") : t("admin.table.refresh")}
               </button>
             </div>
 
@@ -637,7 +658,7 @@ const ProductManager = () => {
             {loading && (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#002366] mx-auto mb-4"></div>
-                <p className="text-ocean-700">正在加载产品数据...</p>
+                <p className="text-ocean-700">{t("admin.table.loading")}</p>
               </div>
             )}
 
@@ -649,7 +670,7 @@ const ProductManager = () => {
                   onClick={fetchProducts}
                   className="mt-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
                 >
-                  重试
+                  {t("common.retry")}
                 </button>
               </div>
             )}
@@ -661,28 +682,28 @@ const ProductManager = () => {
                   <thead>
                     <tr className="bg-ocean-50">
                       <th className="border border-ocean-200 px-4 py-2 text-left">
-                        ID
+                        {t("admin.table.id")}
                       </th>
                       <th className="border border-ocean-200 px-4 py-2 text-left">
-                        图片
+                        {t("admin.table.image")}
                       </th>
                       <th className="border border-ocean-200 px-4 py-2 text-left">
-                        产品名称
+                        {t("admin.table.name")}
                       </th>
                       <th className="border border-ocean-200 px-4 py-2 text-left">
-                        分类
+                        {t("admin.table.category")}
                       </th>
                       <th className="border border-ocean-200 px-4 py-2 text-left">
-                        价格
+                        {t("admin.table.price")}
                       </th>
                       <th className="border border-ocean-200 px-4 py-2 text-left">
-                        描述
+                        {t("admin.table.description")}
                       </th>
                       <th className="border border-ocean-200 px-4 py-2 text-left">
-                        创建时间
+                        {t("admin.table.createdAt")}
                       </th>
                       <th className="border border-ocean-200 px-4 py-2 text-left">
-                        操作
+                        {t("admin.table.actions")}
                       </th>
                     </tr>
                   </thead>
@@ -701,7 +722,7 @@ const ProductManager = () => {
                             />
                           ) : (
                             <div className="w-16 h-16 bg-gray-200 rounded border flex items-center justify-center text-gray-500 text-xs">
-                              无图片
+                              {t("products.noImage")}
                             </div>
                           )}
                         </td>
@@ -718,7 +739,10 @@ const ProductManager = () => {
                           {product.price}
                         </td>
                         <td className="border border-ocean-200 px-4 py-2 text-sm text-gray-600 max-w-xs truncate">
-                          {product.description_zh || product.description_en || product.description || "无描述"}
+                          {product.description_zh ||
+                            product.description_en ||
+                            product.description ||
+                            t("products.noDescription")}
                         </td>
                         <td className="border border-ocean-200 px-4 py-2 text-sm text-gray-500">
                           {new Date(product.created_at).toLocaleString()}
@@ -729,7 +753,7 @@ const ProductManager = () => {
                               onClick={() => handleEditProduct(product)}
                               className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors"
                             >
-                              编辑
+                              {t("common.edit")}
                             </button>
                             <button
                               onClick={() =>
@@ -737,7 +761,7 @@ const ProductManager = () => {
                               }
                               className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition-colors"
                             >
-                              删除
+                              {t("common.delete")}
                             </button>
                           </div>
                         </td>
@@ -753,12 +777,12 @@ const ProductManager = () => {
               <div className="text-center py-8">
                 <p className="text-ocean-600 text-lg">
                   {products.length === 0
-                    ? "暂无产品数据"
-                    : "没有找到匹配的产品"}
+                    ? t("products.noData")
+                    : t("products.noResults")}
                 </p>
                 {products.length > 0 && (
                   <p className="text-ocean-500 text-sm mt-2">
-                    尝试调整搜索条件或分类筛选
+                    {t("products.tryAdjust")}
                   </p>
                 )}
               </div>
