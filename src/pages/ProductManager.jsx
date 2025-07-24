@@ -35,12 +35,15 @@ const ProductManager = () => {
 
   const API_KEY = import.meta.env.VITE_API_KEY || "your-secret-key-12345"; // 后端配置的API密钥
 
-  // 获取产品显示名称 - 优先显示中文名称，如果没有则显示英文名称
+  // 获取产品显示名称 - 优先显示中文名称，如果没有则显示英文名称，最后显示旧格式名称
   const getProductDisplayName = (product) => {
     if (product.name_zh && product.name_zh.trim()) {
       return product.name_zh;
     }
-    return product.name_en || product.name || "未命名产品";
+    if (product.name_en && product.name_en.trim()) {
+      return product.name_en;
+    }
+    return product.name || "未命名产品";
   };
 
   // 获取所有产品
@@ -164,10 +167,17 @@ const ProductManager = () => {
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategory === "all" || product.category === selectedCategory;
+    
+    // 获取产品显示名称用于搜索
+    const displayName = getProductDisplayName(product);
+    
+    // 获取描述用于搜索（优先中文，其次英文，最后旧格式）
+    const description = product.description_zh || product.description_en || product.description || "";
+    
     const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (product.description &&
-        product.description.toLowerCase().includes(searchTerm.toLowerCase()));
+      displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      description.toLowerCase().includes(searchTerm.toLowerCase());
+    
     return matchesCategory && matchesSearch;
   });
 
@@ -483,7 +493,7 @@ const ProductManager = () => {
                     </label>
                     <input
                       type="text"
-                      value={editingProduct.name_en}
+                      value={editingProduct.name_en || editingProduct.name || ""}
                       onChange={(e) =>
                         setEditingProduct({
                           ...editingProduct,
@@ -562,7 +572,7 @@ const ProductManager = () => {
                       英文描述
                     </label>
                     <textarea
-                      value={editingProduct.description_en}
+                      value={editingProduct.description_en || editingProduct.description || ""}
                       onChange={(e) =>
                         setEditingProduct({
                           ...editingProduct,
@@ -708,7 +718,7 @@ const ProductManager = () => {
                           {product.price}
                         </td>
                         <td className="border border-ocean-200 px-4 py-2 text-sm text-gray-600 max-w-xs truncate">
-                          {product.description}
+                          {product.description_zh || product.description_en || product.description || "无描述"}
                         </td>
                         <td className="border border-ocean-200 px-4 py-2 text-sm text-gray-500">
                           {new Date(product.created_at).toLocaleString()}
