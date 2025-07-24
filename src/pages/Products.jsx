@@ -79,7 +79,7 @@ const Products = () => {
       const response = await fetch(
         `${
           import.meta.env.VITE_API_BASE_URL ||
-          "https://sail-express-backend.netlify.app"
+          "https://web-production-c3853.up.railway.app"
         }/api/products?language=${language}`
       );
       const data = await response.json();
@@ -103,8 +103,13 @@ const Products = () => {
       selectedCategory === "all" || product.category === selectedCategory;
 
     // 安全地获取产品名称和描述，避免 undefined 错误
-    const productName = product.name || product.name_zh || product.name_en || "";
-    const productDescription = product.description || product.description_zh || product.description_en || "";
+    const productName =
+      product.name || product.name_zh || product.name_en || "";
+    const productDescription =
+      product.description ||
+      product.description_zh ||
+      product.description_en ||
+      "";
 
     const matchesSearch =
       productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -141,7 +146,11 @@ const Products = () => {
   const handleAddToCart = (product) => {
     addToCart(product);
     // 显示成功提示
-    const productName = product.name || product.name_zh || product.name_en || t("products.noData");
+    const productName =
+      product.name ||
+      product.name_zh ||
+      product.name_en ||
+      t("products.noData");
     alert(`${productName} ${t("products.addedToCart")}`);
   };
 
@@ -284,7 +293,12 @@ const Products = () => {
                       {product.image ? (
                         <img
                           src={getImageUrl(product.image)}
-                          alt={product.name || product.name_zh || product.name_en || t("products.noData")}
+                          alt={
+                            product.name ||
+                            product.name_zh ||
+                            product.name_en ||
+                            t("products.noData")
+                          }
                           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         />
                       ) : (
@@ -304,7 +318,10 @@ const Products = () => {
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
                           <h3 className="font-semibold text-ocean-900 text-sm md:text-lg line-clamp-2">
-                            {product.name || product.name_zh || product.name_en || t("products.noData")}
+                            {product.name ||
+                              product.name_zh ||
+                              product.name_en ||
+                              t("products.noData")}
                           </h3>
                         </div>
 
@@ -319,7 +336,10 @@ const Products = () => {
                         </div>
 
                         <p className="text-gray-600 text-xs md:text-sm line-clamp-2">
-                          {product.description || product.description_zh || product.description_en || t("products.noDescription")}
+                          {product.description ||
+                            product.description_zh ||
+                            product.description_en ||
+                            t("products.noDescription")}
                         </p>
                       </div>
 
@@ -357,4 +377,4 @@ const Products = () => {
   );
 };
 
-export default Products; 
+export default Products;
