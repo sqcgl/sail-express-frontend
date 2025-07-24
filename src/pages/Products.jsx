@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { getImageUrl, productAPI, handleAPIError } from "../services/apiService";
+import {
+  getImageUrl,
+  productAPI,
+  handleAPIError,
+} from "../services/apiService";
 import ProductDetailCard from "../components/ProductDetailCard";
 import FloatingCartIcon from "../components/FloatingCartIcon";
 import { useLanguage } from "../contexts/LanguageContext";

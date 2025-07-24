@@ -1,7 +1,5 @@
 // API服务配置
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  "https://web-production-c3853.up.railway.app";
+const API_BASE_URL = "https://web-production-c3853.up.railway.app";
 
 // 通用API请求函数
 const apiRequest = async (endpoint, options = {}) => {
@@ -180,9 +178,7 @@ export const getImageUrl = (imagePath) => {
   }
 
   // 拼接后端图片URL（用于其他类型的图片）
-  const baseUrl =
-    import.meta.env.VITE_API_BASE_URL ||
-    "https://web-production-c3853.up.railway.app";
+  const baseUrl = "https://web-production-c3853.up.railway.app";
 
   // 确保URL拼接正确，避免双斜杠
   const cleanBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
