@@ -9,7 +9,8 @@ const ProductDetailCard = ({ product, isOpen, onClose, onAddToCart }) => {
   const handleAddToCart = () => {
     onAddToCart(product);
     // 可以在这里添加成功提示
-    alert(`${product.name} ${t("products.addedToCart")}`);
+    const productName = product.name || product.name_zh || product.name_en || t("products.noData");
+    alert(`${productName} ${t("products.addedToCart")}`);
   };
 
   const handleBackdropClick = (e) => {
@@ -45,7 +46,7 @@ const ProductDetailCard = ({ product, isOpen, onClose, onAddToCart }) => {
               {product.image ? (
                 <img
                   src={getImageUrl(product.image)}
-                  alt={product.name}
+                  alt={product.name || product.name_zh || product.name_en || t("products.noData")}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />
               ) : (
@@ -65,7 +66,7 @@ const ProductDetailCard = ({ product, isOpen, onClose, onAddToCart }) => {
               {/* 产品名称 */}
               <div>
                 <h1 className="text-2xl font-bold text-ocean-900 mb-2">
-                  {product.name}
+                  {product.name || product.name_zh || product.name_en || t("products.noData")}
                 </h1>
                 <span className="inline-block bg-ocean-100 text-ocean-800 px-3 py-1 rounded-full text-sm font-medium">
                   {getCategoryName(product.category, language)}
@@ -83,7 +84,7 @@ const ProductDetailCard = ({ product, isOpen, onClose, onAddToCart }) => {
                   {t("products.description")}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  {product.description || t("products.noDescription")}
+                  {product.description || product.description_zh || product.description_en || t("products.noDescription")}
                 </p>
               </div>
 
@@ -136,4 +137,4 @@ const getCategoryName = (categoryId, language = "zh") => {
   return categories[language]?.[categoryId] || categoryId;
 };
 
-export default ProductDetailCard;
+export default ProductDetailCard; 

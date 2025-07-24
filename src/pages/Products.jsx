@@ -101,10 +101,15 @@ const Products = () => {
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategory === "all" || product.category === selectedCategory;
+
+    // 安全地获取产品名称和描述，避免 undefined 错误
+    const productName = product.name || product.name_zh || product.name_en || "";
+    const productDescription = product.description || product.description_zh || product.description_en || "";
+
     const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (product.description &&
-        product.description.toLowerCase().includes(searchTerm.toLowerCase()));
+      productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      productDescription.toLowerCase().includes(searchTerm.toLowerCase());
+
     return matchesCategory && matchesSearch;
   });
 
@@ -136,7 +141,8 @@ const Products = () => {
   const handleAddToCart = (product) => {
     addToCart(product);
     // 显示成功提示
-    alert(`${product.name} ${t("products.addedToCart")}`);
+    const productName = product.name || product.name_zh || product.name_en || t("products.noData");
+    alert(`${productName} ${t("products.addedToCart")}`);
   };
 
   // 清空筛选
@@ -278,7 +284,7 @@ const Products = () => {
                       {product.image ? (
                         <img
                           src={getImageUrl(product.image)}
-                          alt={product.name}
+                          alt={product.name || product.name_zh || product.name_en || t("products.noData")}
                           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         />
                       ) : (
@@ -298,7 +304,7 @@ const Products = () => {
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
                           <h3 className="font-semibold text-ocean-900 text-sm md:text-lg line-clamp-2">
-                            {product.name}
+                            {product.name || product.name_zh || product.name_en || t("products.noData")}
                           </h3>
                         </div>
 
@@ -313,7 +319,7 @@ const Products = () => {
                         </div>
 
                         <p className="text-gray-600 text-xs md:text-sm line-clamp-2">
-                          {product.description || t("products.noDescription")}
+                          {product.description || product.description_zh || product.description_en || t("products.noDescription")}
                         </p>
                       </div>
 
@@ -351,4 +357,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Products; 
