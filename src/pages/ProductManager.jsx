@@ -68,11 +68,7 @@ const ProductManager = () => {
     e.preventDefault();
 
     // 修改验证逻辑：中文名称不再是必填项，但英文名称仍然是必填的
-    if (
-      !newProduct.name_en ||
-      !newProduct.price ||
-      !newProduct.category
-    ) {
+    if (!newProduct.name_en || !newProduct.price || !newProduct.category) {
       alert("请填写所有必填字段（英文名称、价格、分类）");
       return;
     }
