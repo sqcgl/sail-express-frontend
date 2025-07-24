@@ -1,11 +1,11 @@
 // API服务配置
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
-  "https://sail-express-backend.netlify.app";
+  "https://web-production-c3853.up.railway.app";
 
 // 通用API请求函数
 const apiRequest = async (endpoint, options = {}) => {
-  // 对于Netlify Functions，直接使用endpoint，不需要/api前缀
+  // 对于Railway后端，直接使用endpoint
   const url = `${API_BASE_URL}${endpoint}`;
 
   const defaultOptions = {
