@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from "react";
+import { productAPI, handleAPIError } from "../services/apiService";
 import { useLanguage } from "../contexts/LanguageContext";
-import { productAPI, systemAPI, handleAPIError } from "../services/apiService";
 
 const TestAPI = () => {
-  const { t } = useLanguage();
   const [testResults, setTestResults] = useState({});
   const [loading, setLoading] = useState(false);
+  const [apiUrl, setApiUrl] = useState("");
+  const { t } = useLanguage();
+
+  useEffect(() => {
+    // 显示当前使用的API URL
+    setApiUrl("https://web-production-c3853.up.railway.app");
+  }, []);
 
   const runTests = async () => {
     setLoading(true);
+    setTestResults({});
+
     const results = {};
 
     try {
-      // 测试1: 健康检查
-      console.log(t("testAPI.tests.health.log"));
-      const health = await systemAPI.healthCheck();
-      results.health = { success: true, data: health };
-    } catch (error) {
-      results.health = { success: false, error: handleAPIError(error) };
-    }
-
-    try {
-      // 测试2: 获取所有产品
+      // 测试产品API
       console.log(t("testAPI.tests.products.log"));
       const products = await productAPI.getAllProducts();
       results.products = { success: true, data: products };
@@ -30,106 +29,80 @@ const TestAPI = () => {
     }
 
     try {
-      // 测试3: 获取新鲜类产品
-      console.log(t("testAPI.tests.fresh.log"));
+      // 测试分类API
+      console.log(t("testAPI.tests.categories.log"));
       const fresh = await productAPI.getProductsByCategory("fresh");
-      results.fresh = { success: true, data: fresh };
+      results.categories = { success: true, data: fresh };
     } catch (error) {
-      results.fresh = { success: false, error: handleAPIError(error) };
-    }
-
-    try {
-      // 测试4: 获取单个产品
-      console.log(t("testAPI.tests.singleProduct.log"));
-      const product = await productAPI.getProductById(1);
-      results.singleProduct = { success: true, data: product };
-    } catch (error) {
-      results.singleProduct = { success: false, error: handleAPIError(error) };
+      results.categories = { success: false, error: handleAPIError(error) };
     }
 
     setTestResults(results);
     setLoading(false);
   };
 
-  useEffect(() => {
-    runTests();
-  }, []);
-
   const TestResult = ({ title, result }) => (
-    <div
-      className={`p-4 rounded-lg border ${
-        result.success
-          ? "bg-green-50 border-green-200"
-          : "bg-red-50 border-red-200"
-      }`}
-    >
-      <h3
-        className={`font-bold mb-2 ${
-          result.success ? "text-green-800" : "text-red-800"
-        }`}
-      >
-        {title}
-      </h3>
-      {result.success ? (
-        <div className="text-green-700">
-          <p>✅ {t("testAPI.result.pass")}</p>
-          {result.data && (
-            <pre className="mt-2 text-xs bg-white p-2 rounded border overflow-auto">
-              {JSON.stringify(result.data, null, 2)}
-            </pre>
-          )}
+    <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
+      <h3 className="font-semibold text-ocean-900 mb-2">{title}</h3>
+      {result?.success ? (
+        <div className="text-green-600">
+          <p>✅ 成功</p>
+          <p className="text-sm text-gray-600">
+            数据: {JSON.stringify(result.data, null, 2)}
+          </p>
         </div>
       ) : (
-        <div className="text-red-700">
-          <p>❌ {t("testAPI.result.fail")}</p>
-          <p className="text-sm">{result.error}</p>
+        <div className="text-red-600">
+          <p>❌ 失败</p>
+          <p className="text-sm">{result?.error || "未知错误"}</p>
         </div>
       )}
     </div>
   );
 
   return (
-    <div className="w-full pt-20 px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-ocean-900 mb-8">
-          {t("testAPI.title")}
-        </h1>
-
-        {loading && (
-          <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#002366] mx-auto mb-4"></div>
-            <p>{t("testAPI.loading")}</p>
-          </div>
-        )}
-
-        <div className="grid gap-4">
-          <TestResult
-            title={t("testAPI.tests.health.title")}
-            result={testResults.health || {}}
-          />
-          <TestResult
-            title={t("testAPI.tests.products.title")}
-            result={testResults.products || {}}
-          />
-          <TestResult
-            title={t("testAPI.tests.fresh.title")}
-            result={testResults.fresh || {}}
-          />
-          <TestResult
-            title={t("testAPI.tests.singleProduct.title")}
-            result={testResults.singleProduct || {}}
-          />
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-ocean-900 mb-4">
+            {t("testAPI.title")}
+          </h1>
+          <p className="text-ocean-600">{t("testAPI.description")}</p>
         </div>
 
-        <div className="mt-8">
+        {/* API URL 显示 */}
+        <div className="bg-blue-50 p-4 rounded-lg mb-6">
+          <h2 className="font-semibold text-blue-900 mb-2">当前API配置</h2>
+          <p className="text-blue-700 font-mono text-sm">{apiUrl}</p>
+        </div>
+
+        {/* 测试按钮 */}
+        <div className="text-center mb-8">
           <button
             onClick={runTests}
             disabled={loading}
-            className="bg-[#002366] text-white px-6 py-3 rounded-lg hover:bg-[#001a4d] disabled:opacity-50"
+            className="bg-ocean-600 text-white px-6 py-3 rounded-lg hover:bg-ocean-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? t("testAPI.testing") : t("testAPI.retest")}
+            {loading ? "测试中..." : t("testAPI.runTests")}
           </button>
         </div>
+
+        {/* 测试结果 */}
+        {Object.keys(testResults).length > 0 && (
+          <div>
+            <h2 className="text-2xl font-bold text-ocean-900 mb-4">
+              {t("testAPI.results")}
+            </h2>
+            <TestResult
+              title={t("testAPI.tests.products.title")}
+              result={testResults.products || {}}
+            />
+            <TestResult
+              title={t("testAPI.tests.categories.title")}
+              result={testResults.categories || {}}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
