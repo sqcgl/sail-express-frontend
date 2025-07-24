@@ -194,4 +194,4 @@ export default {
   systemAPI,
   handleAPIError,
   getImageUrl,
-}; 
+};

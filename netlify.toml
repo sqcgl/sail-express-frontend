@@ -1,2 +1,19 @@
-# 已迁移到Railway部署，此文件不再需要
-# 保留此文件仅作为备份参考 
+# Netlify部署配置
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# SPA路由重定向配置
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# 安全头配置
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin" 
