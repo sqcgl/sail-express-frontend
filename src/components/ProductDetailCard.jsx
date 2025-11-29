@@ -3,19 +3,70 @@ import { getImageUrl } from "../services/apiService";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const ProductDetailCard = ({ product, isOpen, onClose, onAddToCart }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   if (!isOpen || !product) {
     return null;
   }
 
-  const productName =
-    product.name || product.name_zh || product.name_en || t("products.noData");
-  const productDescription =
-    product.description ||
-    product.description_zh ||
-    product.description_en ||
-    t("products.noDescription");
+  // 根据语言获取产品名称
+  const getProductName = () => {
+    if (language === "zh") {
+      return (
+        product.name_zh ||
+        product.name_en ||
+        product.name ||
+        t("products.noData")
+      );
+    } else {
+      return (
+        product.name_en ||
+        product.name_zh ||
+        product.name ||
+        t("products.noData")
+      );
+    }
+  };
+
+  // 根据语言获取产品描述
+  const getProductDescription = () => {
+    if (language === "zh") {
+      return (
+        product.description_zh ||
+        product.description_en ||
+        product.description ||
+        t("products.noDescription")
+      );
+    } else {
+      return (
+        product.description_en ||
+        product.description_zh ||
+        product.description ||
+        t("products.noDescription")
+      );
+    }
+  };
+
+  // 格式化价格和单位显示
+  const formatPriceWithUnit = (product) => {
+    let price = product.price || "";
+
+    // 处理"询价"的翻译
+    if (price === "询价" || price === "Inquiry") {
+      price = language === "zh" ? "询价" : "Inquiry";
+    }
+
+    const unit =
+      language === "zh" ? product.unit_zh || "" : product.unit_en || "";
+
+    if (unit) {
+      return `${price} / ${unit}`;
+    }
+    return price;
+  };
+
+  const productName = getProductName();
+  const productDescription = getProductDescription();
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -36,7 +87,7 @@ const ProductDetailCard = ({ product, isOpen, onClose, onAddToCart }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* 产品图片 */}
             <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-              {product.image ? (
+              {product.image && getImageUrl(product.image) ? (
                 <img
                   src={getImageUrl(product.image)}
                   alt={productName}
@@ -82,7 +133,7 @@ const ProductDetailCard = ({ product, isOpen, onClose, onAddToCart }) => {
                   {t("products.details.price")}
                 </h3>
                 <p className="text-2xl font-bold text-[#002366]">
-                  ¥{product.price}
+                  {formatPriceWithUnit(product)}
                 </p>
               </div>
 

@@ -80,8 +80,12 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await productAPI.getAllProducts(language);
-      setProducts(response.data);
+      const response = productAPI.getAllProducts(language);
+      if (response.success) {
+        setProducts(response.data);
+      } else {
+        setError(response.message || "获取产品失败");
+      }
     } catch (error) {
       setError(handleAPIError(error));
       console.error("获取产品失败:", error);
@@ -90,19 +94,51 @@ const Products = () => {
     }
   };
 
+  // 根据语言获取产品名称
+  const getProductName = (product) => {
+    if (language === "zh") {
+      return product.name_zh || product.name_en || product.name || t("products.noData");
+    } else {
+      return product.name_en || product.name_zh || product.name || t("products.noData");
+    }
+  };
+
+  // 根据语言获取产品描述
+  const getProductDescription = (product) => {
+    if (language === "zh") {
+      return product.description_zh || product.description_en || product.description || t("products.noDescription");
+    } else {
+      return product.description_en || product.description_zh || product.description || t("products.noDescription");
+    }
+  };
+
+  // 格式化价格和单位显示
+  const formatPriceWithUnit = (product) => {
+    let price = product.price || "";
+    
+    // 处理"询价"的翻译
+    if (price === "询价" || price === "Inquiry") {
+      price = language === "zh" ? "询价" : "Inquiry";
+    }
+    
+    const unit = language === "zh" 
+      ? (product.unit_zh || "") 
+      : (product.unit_en || "");
+    
+    if (unit) {
+      return `${price} / ${unit}`;
+    }
+    return price;
+  };
+
   // 筛选产品
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategory === "all" || product.category === selectedCategory;
 
     // 安全地获取产品名称和描述，避免 undefined 错误
-    const productName =
-      product.name || product.name_zh || product.name_en || "";
-    const productDescription =
-      product.description ||
-      product.description_zh ||
-      product.description_en ||
-      "";
+    const productName = getProductName(product);
+    const productDescription = getProductDescription(product);
 
     const matchesSearch =
       productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -139,11 +175,7 @@ const Products = () => {
   const handleAddToCart = (product) => {
     addToCart(product);
     // 显示成功提示
-    const productName =
-      product.name ||
-      product.name_zh ||
-      product.name_en ||
-      t("products.noData");
+    const productName = getProductName(product);
     alert(`${productName} ${t("products.addedToCart")}`);
   };
 
@@ -283,15 +315,10 @@ const Products = () => {
                   >
                     {/* 产品图片 */}
                     <div className="aspect-square bg-gray-100 overflow-hidden">
-                      {product.image ? (
+                      {product.image && getImageUrl(product.image) ? (
                         <img
                           src={getImageUrl(product.image)}
-                          alt={
-                            product.name ||
-                            product.name_zh ||
-                            product.name_en ||
-                            t("products.noData")
-                          }
+                          alt={getProductName(product)}
                           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         />
                       ) : (
@@ -311,10 +338,7 @@ const Products = () => {
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
                           <h3 className="font-semibold text-ocean-900 text-sm md:text-lg line-clamp-2">
-                            {product.name ||
-                              product.name_zh ||
-                              product.name_en ||
-                              t("products.noData")}
+                            {getProductName(product)}
                           </h3>
                         </div>
 
@@ -324,15 +348,12 @@ const Products = () => {
                               ?.name || product.category}
                           </span>
                           <span className="text-[#002366] font-bold text-base md:text-lg">
-                            {product.price}
+                            {formatPriceWithUnit(product)}
                           </span>
                         </div>
 
                         <p className="text-gray-600 text-xs md:text-sm line-clamp-2">
-                          {product.description ||
-                            product.description_zh ||
-                            product.description_en ||
-                            t("products.noDescription")}
+                          {getProductDescription(product)}
                         </p>
                       </div>
 

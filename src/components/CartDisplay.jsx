@@ -4,7 +4,44 @@ import { useLanguage } from "../contexts/LanguageContext";
 
 const CartDisplay = () => {
   const { selectedProducts, removeFromCart, getTotalValue } = useCart();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  // 根据语言获取产品名称
+  const getProductName = (product) => {
+    if (language === "zh") {
+      return product.name_zh || product.name_en || product.name || t("products.noData");
+    } else {
+      return product.name_en || product.name_zh || product.name || t("products.noData");
+    }
+  };
+
+  // 根据语言获取产品描述
+  const getProductDescription = (product) => {
+    if (language === "zh") {
+      return product.description_zh || product.description_en || product.description || "";
+    } else {
+      return product.description_en || product.description_zh || product.description || "";
+    }
+  };
+
+  // 格式化价格和单位显示
+  const formatPriceWithUnit = (product) => {
+    let price = product.price || "";
+    
+    // 处理"询价"的翻译
+    if (price === "询价" || price === "Inquiry") {
+      price = language === "zh" ? "询价" : "Inquiry";
+    }
+    
+    const unit = language === "zh" 
+      ? (product.unit_zh || "") 
+      : (product.unit_en || "");
+    
+    if (unit) {
+      return `${price} / ${unit}`;
+    }
+    return price;
+  };
 
   if (selectedProducts.length === 0) {
     return (
@@ -62,13 +99,13 @@ const CartDisplay = () => {
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <h4 className="font-semibold text-ocean-900 mb-1">
-                    {product.name}
+                    {getProductName(product)}
                   </h4>
                   <p className="text-ocean-600 text-sm mb-2">
-                    {product.description}
+                    {getProductDescription(product)}
                   </p>
                   <p className="text-lg font-bold text-[#002366]">
-                    {product.price}
+                    {formatPriceWithUnit(product)}
                   </p>
                 </div>
                 <button

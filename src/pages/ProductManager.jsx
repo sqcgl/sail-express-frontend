@@ -21,6 +21,8 @@ const ProductManager = () => {
     description_zh: "",
     description_en: "",
     price: "",
+    unit_zh: "",
+    unit_en: "",
     category: "fresh",
   });
   const [selectedImage, setSelectedImage] = useState(null);
@@ -36,16 +38,34 @@ const ProductManager = () => {
   ];
 
   const API_KEY = import.meta.env.VITE_API_KEY || "your-secret-key-12345"; // 后端配置的API密钥
+  const { language } = useLanguage();
 
-  // 获取产品显示名称 - 优先显示中文名称，如果没有则显示英文名称，最后显示旧格式名称
+  // 根据语言获取产品显示名称
   const getProductDisplayName = (product) => {
-    if (product.name_zh && product.name_zh.trim()) {
-      return product.name_zh;
+    if (language === "zh") {
+      return product.name_zh || product.name_en || product.name || t("products.noData");
+    } else {
+      return product.name_en || product.name_zh || product.name || t("products.noData");
     }
-    if (product.name_en && product.name_en.trim()) {
-      return product.name_en;
+  };
+
+  // 格式化价格和单位显示
+  const formatPriceWithUnit = (product) => {
+    let price = product.price || "";
+    
+    // 处理"询价"的翻译
+    if (price === "询价" || price === "Inquiry") {
+      price = language === "zh" ? "询价" : "Inquiry";
     }
-    return product.name || t("products.noData");
+    
+    const unit = language === "zh" 
+      ? (product.unit_zh || "") 
+      : (product.unit_en || "");
+    
+    if (unit) {
+      return `${price} / ${unit}`;
+    }
+    return price;
   };
 
   // 获取所有产品
@@ -53,11 +73,11 @@ const ProductManager = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await productAPI.getAllProducts();
+      const response = productAPI.getAllProducts();
       if (response.success) {
         setProducts(response.data);
       } else {
-        setError(t("products.error"));
+        setError(response.message || t("products.error"));
       }
     } catch (error) {
       const errorMessage = handleAPIError(error);
@@ -99,7 +119,7 @@ const ProductManager = () => {
         setShowAddForm(false);
         fetchProducts(); // 重新获取产品列表
       } else {
-        alert(t("admin.form.error.add"));
+        alert(`${t("admin.form.error.add")}: ${response.message || ""}`);
       }
     } catch (error) {
       const errorMessage = handleAPIError(error);
@@ -121,7 +141,7 @@ const ProductManager = () => {
         alert(t("admin.form.success.delete"));
         fetchProducts(); // 重新获取产品列表
       } else {
-        alert(t("admin.form.error.delete"));
+        alert(`${t("admin.form.error.delete")}: ${response.message || ""}`);
       }
     } catch (error) {
       const errorMessage = handleAPIError(error);
@@ -230,7 +250,7 @@ const ProductManager = () => {
         setShowEditForm(false);
         fetchProducts(); // 重新获取产品列表
       } else {
-        alert(t("admin.form.error.update"));
+        alert(`${t("admin.form.error.update")}: ${response.message || ""}`);
       }
     } catch (error) {
       const errorMessage = handleAPIError(error);
@@ -386,6 +406,34 @@ const ProductManager = () => {
                       required
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-ocean-700 mb-2">
+                      {t("admin.form.unitZh") || "单位 (中文)"}
+                    </label>
+                    <input
+                      type="text"
+                      value={newProduct.unit_zh || ""}
+                      onChange={(e) =>
+                        setNewProduct({ ...newProduct, unit_zh: e.target.value })
+                      }
+                      className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
+                      placeholder="箱、盒、包、磅等"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-ocean-700 mb-2">
+                      {t("admin.form.unitEn") || "单位 (英文)"}
+                    </label>
+                    <input
+                      type="text"
+                      value={newProduct.unit_en || ""}
+                      onChange={(e) =>
+                        setNewProduct({ ...newProduct, unit_en: e.target.value })
+                      }
+                      className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
+                      placeholder="cs, box, pk, lb, etc."
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-ocean-700 mb-2">
@@ -533,6 +581,40 @@ const ProductManager = () => {
                       className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
                       placeholder="例如: ¥180/kg"
                       required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-ocean-700 mb-2">
+                      {t("admin.form.unitZh") || "单位 (中文)"}
+                    </label>
+                    <input
+                      type="text"
+                      value={editingProduct.unit_zh || ""}
+                      onChange={(e) =>
+                        setEditingProduct({
+                          ...editingProduct,
+                          unit_zh: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
+                      placeholder="箱、盒、包、磅等"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-ocean-700 mb-2">
+                      {t("admin.form.unitEn") || "单位 (英文)"}
+                    </label>
+                    <input
+                      type="text"
+                      value={editingProduct.unit_en || ""}
+                      onChange={(e) =>
+                        setEditingProduct({
+                          ...editingProduct,
+                          unit_en: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
+                      placeholder="cs, box, pk, lb, etc."
                     />
                   </div>
                 </div>
@@ -714,7 +796,7 @@ const ProductManager = () => {
                           {product.id}
                         </td>
                         <td className="border border-ocean-200 px-4 py-2">
-                          {product.image ? (
+                          {product.image && getImageUrl(product.image) ? (
                             <img
                               src={getImageUrl(product.image)}
                               alt={getProductDisplayName(product)}
@@ -736,7 +818,7 @@ const ProductManager = () => {
                           </span>
                         </td>
                         <td className="border border-ocean-200 px-4 py-2 text-[#002366] font-bold">
-                          {product.price}
+                          {formatPriceWithUnit(product)}
                         </td>
                         <td className="border border-ocean-200 px-4 py-2 text-sm text-gray-600 max-w-xs truncate">
                           {product.description_zh ||

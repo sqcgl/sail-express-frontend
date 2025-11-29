@@ -7,7 +7,35 @@ import {
 } from "../services/apiService";
 
 const ImageManager = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  // 根据语言获取产品名称
+  const getProductName = (product) => {
+    if (language === "zh") {
+      return product.name_zh || product.name_en || product.name || "未命名产品";
+    } else {
+      return product.name_en || product.name_zh || product.name || "Unnamed Product";
+    }
+  };
+
+  // 格式化价格和单位显示
+  const formatPriceWithUnit = (product) => {
+    let price = product.price || "";
+    
+    // 处理"询价"的翻译
+    if (price === "询价" || price === "Inquiry") {
+      price = language === "zh" ? "询价" : "Inquiry";
+    }
+    
+    const unit = language === "zh" 
+      ? (product.unit_zh || "") 
+      : (product.unit_en || "");
+    
+    if (unit) {
+      return `${price} / ${unit}`;
+    }
+    return price;
+  };
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,9 +58,9 @@ const ImageManager = () => {
 
       let response;
       if (selectedCategory === "all") {
-        response = await productAPI.getAllProducts();
+        response = productAPI.getAllProducts();
       } else {
-        response = await productAPI.getProductsByCategory(selectedCategory);
+        response = productAPI.getProductsByCategory(selectedCategory);
       }
 
       if (response.success) {
@@ -42,7 +70,7 @@ const ImageManager = () => {
         );
         setProducts(productsWithImages);
       } else {
-        setError(t("imageManager.errors.fetchFailed"));
+        setError(response.message || t("imageManager.errors.fetchFailed"));
       }
     } catch (error) {
       const errorMessage = handleAPIError(error);
@@ -211,15 +239,21 @@ const ImageManager = () => {
                         // 网格视图
                         <div>
                           <div className="aspect-square overflow-hidden">
-                            <img
-                              src={getImageUrl(product.image)}
-                              alt={product.name}
-                              className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                            />
+                            {getImageUrl(product.image) ? (
+                              <img
+                                src={getImageUrl(product.image)}
+                                alt={product.name || product.name_zh || product.name_en || "Product"}
+                                className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                <span className="text-gray-400">暂无图片</span>
+                              </div>
+                            )}
                           </div>
                           <div className="p-4">
                             <h3 className="font-medium text-ocean-900 mb-1 truncate">
-                              {product.name}
+                              {getProductName(product)}
                             </h3>
                             <p className="text-sm text-ocean-600 mb-2">
                               {
@@ -239,15 +273,21 @@ const ImageManager = () => {
                         // 列表视图
                         <>
                           <div className="w-20 h-20 flex-shrink-0 overflow-hidden rounded-lg">
-                            <img
-                              src={getImageUrl(product.image)}
-                              alt={product.name}
-                              className="w-full h-full object-cover"
-                            />
+                            {getImageUrl(product.image) ? (
+                              <img
+                                src={getImageUrl(product.image)}
+                                alt={getProductName(product)}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                <span className="text-gray-400 text-xs">无图</span>
+                              </div>
+                            )}
                           </div>
                           <div className="ml-4 flex-1">
                             <h3 className="font-medium text-ocean-900">
-                              {product.name}
+                              {getProductName(product)}
                             </h3>
                             <p className="text-sm text-ocean-600">
                               {
@@ -264,7 +304,7 @@ const ImageManager = () => {
                           </div>
                           <div className="text-right">
                             <p className="text-sm font-medium text-[#002366]">
-                              {product.price}
+                              {formatPriceWithUnit(product)}
                             </p>
                           </div>
                         </>

@@ -9,15 +9,14 @@ const ImageUpload = ({
   disabled = false,
 }) => {
   const [dragActive, setDragActive] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState(
-    currentImage ? getImageUrl(currentImage) : null
-  );
+  const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
 
   // 当currentImage改变时更新预览
   useEffect(() => {
     if (currentImage) {
-      setPreviewUrl(getImageUrl(currentImage));
+      const imageUrl = getImageUrl(currentImage);
+      setPreviewUrl(imageUrl);
     } else {
       setPreviewUrl(null);
     }
