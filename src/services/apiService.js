@@ -1,6 +1,40 @@
 // 本地数据服务 - 使用localStorage存储产品数据
 const STORAGE_KEY = "sail_express_products";
 
+// 导入新鲜类产品图片
+import norwaySalmonImg from "../assets/products/fresh/norway_salmon.png";
+import canadaSalmonImg from "../assets/products/fresh/canada_salmon.png";
+import troutSalmonImg from "../assets/products/fresh/trout_salmon.png";
+import bakkSalmonImg from "../assets/products/fresh/bakk_salmon.png";
+import bluefinTunaImg from "../assets/products/fresh/bluefin_tuna.png";
+import bigeyeImg from "../assets/products/fresh/bigeye.png";
+import yellowtailImg from "../assets/products/fresh/yellowtail.png";
+import kanpachiImg from "../assets/products/fresh/kanpachi.png";
+import stripbassImg from "../assets/products/fresh/stripbass.png";
+import madaiImg from "../assets/products/fresh/madai.png";
+import flukeImg from "../assets/products/fresh/fluke.png";
+import uniImg from "../assets/products/fresh/uni.png";
+import spanishMackerelImg from "../assets/products/fresh/spanish_mackerel.png";
+import quailEggImg from "../assets/products/fresh/quail_egg.png";
+
+// 图片路径映射表
+const IMAGE_PATH_MAP = {
+  "/src/assets/products/fresh/norway_salmon.png": norwaySalmonImg,
+  "/src/assets/products/fresh/canada_salmon.png": canadaSalmonImg,
+  "/src/assets/products/fresh/trout_salmon.png": troutSalmonImg,
+  "/src/assets/products/fresh/bakk_salmon.png": bakkSalmonImg,
+  "/src/assets/products/fresh/bluefin_tuna.png": bluefinTunaImg,
+  "/src/assets/products/fresh/bigeye.png": bigeyeImg,
+  "/src/assets/products/fresh/yellowtail.png": yellowtailImg,
+  "/src/assets/products/fresh/kanpachi.png": kanpachiImg,
+  "/src/assets/products/fresh/stripbass.png": stripbassImg,
+  "/src/assets/products/fresh/madai.png": madaiImg,
+  "/src/assets/products/fresh/fluke.png": flukeImg,
+  "/src/assets/products/fresh/uni.png": uniImg,
+  "/src/assets/products/fresh/spanish_mackerel.png": spanishMackerelImg,
+  "/src/assets/products/fresh/quail_egg.png": quailEggImg,
+};
+
 // 单位映射表
 const UNIT_MAP = {
   箱: { zh: "箱", en: "cs" },
@@ -1199,12 +1233,13 @@ const initializeDefaultProducts = () => {
         name_zh: "挪威三文鱼",
         name_en: "Norway Salmon",
         description_zh: "挪威进口新鲜三文鱼，肉质鲜美，适合制作寿司和刺身",
-        description_en: "Fresh Norwegian salmon, tender and delicious, perfect for sushi and sashimi",
+        description_en:
+          "Fresh Norwegian salmon, tender and delicious, perfect for sushi and sashimi",
         price: "询价",
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/norway_salmon.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1217,7 +1252,7 @@ const initializeDefaultProducts = () => {
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/norway_salmon.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1225,12 +1260,13 @@ const initializeDefaultProducts = () => {
         name_zh: "加拿大三文鱼",
         name_en: "Canada Salmon",
         description_zh: "加拿大进口新鲜三文鱼，肉质紧实，营养丰富",
-        description_en: "Fresh Canadian salmon, firm texture, rich in nutrients",
+        description_en:
+          "Fresh Canadian salmon, firm texture, rich in nutrients",
         price: "询价",
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/canada_salmon.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1238,12 +1274,13 @@ const initializeDefaultProducts = () => {
         name_zh: "三文鳟",
         name_en: "Salmon Trout",
         description_zh: "新鲜三文鳟，肉质细嫩，适合制作日式料理",
-        description_en: "Fresh salmon trout, tender texture, perfect for Japanese cuisine",
+        description_en:
+          "Fresh salmon trout, tender texture, perfect for Japanese cuisine",
         price: "询价",
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/trout_salmon.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1251,12 +1288,13 @@ const initializeDefaultProducts = () => {
         name_zh: "厨房切片三文鱼",
         name_en: "Kitchen Cut Salmon",
         description_zh: "已切片的新鲜三文鱼，方便使用，适合制作寿司",
-        description_en: "Pre-sliced fresh salmon, convenient to use, perfect for sushi making",
+        description_en:
+          "Pre-sliced fresh salmon, convenient to use, perfect for sushi making",
         price: "询价",
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/norway_salmon.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1264,12 +1302,13 @@ const initializeDefaultProducts = () => {
         name_zh: "法罗群岛皇冠三文鱼",
         name_en: "Bakka Salmon (Faroe Island)",
         description_zh: "法罗群岛进口皇冠三文鱼，顶级品质，肉质鲜美",
-        description_en: "Imported Bakka salmon from Faroe Island, premium quality, delicious flavor",
+        description_en:
+          "Imported Bakka salmon from Faroe Island, premium quality, delicious flavor",
         price: "询价",
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/bakk_salmon.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1282,7 +1321,7 @@ const initializeDefaultProducts = () => {
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/norway_salmon.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1290,12 +1329,13 @@ const initializeDefaultProducts = () => {
         name_zh: "蓝鳍金枪鱼",
         name_en: "Bluefin Tuna",
         description_zh: "顶级蓝鳍金枪鱼，肉质鲜嫩，适合制作高级寿司和刺身",
-        description_en: "Premium bluefin tuna, tender and fresh, perfect for high-end sushi and sashimi",
+        description_en:
+          "Premium bluefin tuna, tender and fresh, perfect for high-end sushi and sashimi",
         price: "询价",
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/bluefin_tuna.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1308,7 +1348,7 @@ const initializeDefaultProducts = () => {
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/bigeye.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1316,12 +1356,13 @@ const initializeDefaultProducts = () => {
         name_zh: "新鲜黄尾鱼",
         name_en: "Fresh Yellowtail (Hamachi)",
         description_zh: "新鲜黄尾鱼（Hamachi），肉质鲜美，适合制作寿司和刺身",
-        description_en: "Fresh yellowtail (Hamachi), delicious flavor, perfect for sushi and sashimi",
+        description_en:
+          "Fresh yellowtail (Hamachi), delicious flavor, perfect for sushi and sashimi",
         price: "询价",
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/yellowtail.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1334,7 +1375,7 @@ const initializeDefaultProducts = () => {
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/kanpachi.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1342,12 +1383,13 @@ const initializeDefaultProducts = () => {
         name_zh: "鲈鱼",
         name_en: "Striped Bass",
         description_zh: "新鲜鲈鱼，肉质细嫩，适合制作日式料理",
-        description_en: "Fresh striped bass, tender texture, perfect for Japanese cuisine",
+        description_en:
+          "Fresh striped bass, tender texture, perfect for Japanese cuisine",
         price: "询价",
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/stripbass.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1355,12 +1397,13 @@ const initializeDefaultProducts = () => {
         name_zh: "马黛（真鲷）",
         name_en: "Madai (Sea Bream)",
         description_zh: "新鲜马黛（真鲷），肉质鲜美，适合制作寿司和刺身",
-        description_en: "Fresh madai (sea bream), delicious flavor, perfect for sushi and sashimi",
+        description_en:
+          "Fresh madai (sea bream), delicious flavor, perfect for sushi and sashimi",
         price: "询价",
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/madai.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1373,7 +1416,7 @@ const initializeDefaultProducts = () => {
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/fluke.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1381,12 +1424,13 @@ const initializeDefaultProducts = () => {
         name_zh: "加州海胆",
         name_en: "Uni (California Sea Urchin)",
         description_zh: "加州新鲜海胆，口感鲜甜，适合制作高级寿司",
-        description_en: "Fresh California sea urchin (uni), sweet and fresh, perfect for premium sushi",
+        description_en:
+          "Fresh California sea urchin (uni), sweet and fresh, perfect for premium sushi",
         price: "询价",
         unit_zh: "盒",
         unit_en: "box",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/uni.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1399,7 +1443,7 @@ const initializeDefaultProducts = () => {
         unit_zh: "磅",
         unit_en: "lb",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/spanish_mackerel.png",
         created_at: new Date().toISOString(),
       },
       {
@@ -1407,12 +1451,13 @@ const initializeDefaultProducts = () => {
         name_zh: "鹌鹑蛋",
         name_en: "Quail Egg",
         description_zh: "新鲜鹌鹑蛋，营养丰富，适合制作日式料理",
-        description_en: "Fresh quail eggs, rich in nutrients, perfect for Japanese cuisine",
+        description_en:
+          "Fresh quail eggs, rich in nutrients, perfect for Japanese cuisine",
         price: "询价",
         unit_zh: "盒",
         unit_en: "box",
         category: "fresh",
-        image: null,
+        image: "/src/assets/products/fresh/quail_egg.png",
         created_at: new Date().toISOString(),
       },
     ];
@@ -1690,6 +1735,15 @@ export const getImageUrl = (imagePath) => {
   // 如果是完整URL，直接返回
   if (typeof imagePath === "string" && imagePath.startsWith("http")) {
     return imagePath;
+  }
+
+  // 如果是 src/assets 路径，从映射表中查找
+  if (typeof imagePath === "string" && imagePath.startsWith("/src/assets/")) {
+    const mappedUrl = IMAGE_PATH_MAP[imagePath];
+    if (mappedUrl) {
+      return mappedUrl;
+    }
+    return null;
   }
 
   // 如果是相对路径，尝试从public目录加载

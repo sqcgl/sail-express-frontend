@@ -43,25 +43,34 @@ const ProductManager = () => {
   // 根据语言获取产品显示名称
   const getProductDisplayName = (product) => {
     if (language === "zh") {
-      return product.name_zh || product.name_en || product.name || t("products.noData");
+      return (
+        product.name_zh ||
+        product.name_en ||
+        product.name ||
+        t("products.noData")
+      );
     } else {
-      return product.name_en || product.name_zh || product.name || t("products.noData");
+      return (
+        product.name_en ||
+        product.name_zh ||
+        product.name ||
+        t("products.noData")
+      );
     }
   };
 
   // 格式化价格和单位显示
   const formatPriceWithUnit = (product) => {
     let price = product.price || "";
-    
+
     // 处理"询价"的翻译
     if (price === "询价" || price === "Inquiry") {
-      price = language === "zh" ? "询价" : "Inquiry";
+      price = language === "zh" ? "询价" : "MP";
     }
-    
-    const unit = language === "zh" 
-      ? (product.unit_zh || "") 
-      : (product.unit_en || "");
-    
+
+    const unit =
+      language === "zh" ? product.unit_zh || "" : product.unit_en || "";
+
     if (unit) {
       return `${price} / ${unit}`;
     }
@@ -414,7 +423,10 @@ const ProductManager = () => {
                       type="text"
                       value={newProduct.unit_zh || ""}
                       onChange={(e) =>
-                        setNewProduct({ ...newProduct, unit_zh: e.target.value })
+                        setNewProduct({
+                          ...newProduct,
+                          unit_zh: e.target.value,
+                        })
                       }
                       className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
                       placeholder="箱、盒、包、磅等"
@@ -428,7 +440,10 @@ const ProductManager = () => {
                       type="text"
                       value={newProduct.unit_en || ""}
                       onChange={(e) =>
-                        setNewProduct({ ...newProduct, unit_en: e.target.value })
+                        setNewProduct({
+                          ...newProduct,
+                          unit_en: e.target.value,
+                        })
                       }
                       className="w-full px-3 py-2 border border-ocean-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002366]"
                       placeholder="cs, box, pk, lb, etc."

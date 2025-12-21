@@ -53,7 +53,7 @@ const ProductDetailCard = ({ product, isOpen, onClose, onAddToCart }) => {
 
     // 处理"询价"的翻译
     if (price === "询价" || price === "Inquiry") {
-      price = language === "zh" ? "询价" : "Inquiry";
+      price = language === "zh" ? "询价" : "MP";
     }
 
     const unit =

@@ -5,7 +5,7 @@ export default {
     about: "About Us",
     products: "Products",
     contact: "Contact",
-    inquiry: "Inquire Now",
+    inquiry: "MP",
     language: {
       zh: "中文",
       en: "English",
@@ -70,7 +70,7 @@ export default {
       title: "Filter by Category",
       all: "All Categories",
     },
-    addToInquiry: "Add to Inquiry",
+    addToInquiry: "Add to MP",
     viewDetails: "View Details",
     close: "Close",
     continueBrowsing: "Continue Browsing",
@@ -90,7 +90,7 @@ export default {
     noImage: "No Image",
     showing: "Showing",
     items: "products",
-    goToInquiry: "Go to Inquiry",
+    goToInquiry: "Go to MP",
     itemsInCart: "{count} items in cart",
   },
 
@@ -103,7 +103,7 @@ export default {
     removeProduct: "Remove Product",
     totalValue: "Total Value",
     priceNote:
-      "* The above prices are reference prices, please refer to actual inquiry for specific prices",
+      "* The above prices are reference prices, please refer to actual MP for specific prices",
   },
 
   // Contact
@@ -111,7 +111,7 @@ export default {
     title: "Contact Us",
     subtitle: "Always ready to provide professional service",
     form: {
-      title: "Send Inquiry",
+      title: "Send MP",
       name: "Name",
       namePlaceholder: "Please enter your name",
       company: "Company Name",
@@ -120,14 +120,13 @@ export default {
       emailPlaceholder: "Please enter email address",
       phone: "Phone Number",
       phonePlaceholder: "Please enter 10-digit phone number",
-      message: "Inquiry Content",
+      message: "MP Content",
       messagePlaceholder:
         "Please describe your requirements in detail, including product names, quantities, etc.",
-      submit: "Send Inquiry",
+      submit: "Send MP",
       sending: "Sending...",
       reset: "Reset",
-      successMessage:
-        "Inquiry submitted successfully! We will contact you soon.",
+      successMessage: "MP submitted successfully! We will contact you soon.",
       errorMessage: "Submission failed, please try again later.",
     },
     info: {
@@ -306,7 +305,7 @@ export default {
     },
     featuredProducts: {
       title: "Featured Products",
-      inquiry: "Inquiry",
+      inquiry: "MP",
       viewAll: "View All Products",
       items: [
         { name: "Fresh Salmon", price: "¥180/kg", category: "Seafood" },

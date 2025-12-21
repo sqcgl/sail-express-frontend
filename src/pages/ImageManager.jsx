@@ -14,23 +14,24 @@ const ImageManager = () => {
     if (language === "zh") {
       return product.name_zh || product.name_en || product.name || "未命名产品";
     } else {
-      return product.name_en || product.name_zh || product.name || "Unnamed Product";
+      return (
+        product.name_en || product.name_zh || product.name || "Unnamed Product"
+      );
     }
   };
 
   // 格式化价格和单位显示
   const formatPriceWithUnit = (product) => {
     let price = product.price || "";
-    
+
     // 处理"询价"的翻译
     if (price === "询价" || price === "Inquiry") {
-      price = language === "zh" ? "询价" : "Inquiry";
+      price = language === "zh" ? "询价" : "MP";
     }
-    
-    const unit = language === "zh" 
-      ? (product.unit_zh || "") 
-      : (product.unit_en || "");
-    
+
+    const unit =
+      language === "zh" ? product.unit_zh || "" : product.unit_en || "";
+
     if (unit) {
       return `${price} / ${unit}`;
     }
@@ -242,7 +243,12 @@ const ImageManager = () => {
                             {getImageUrl(product.image) ? (
                               <img
                                 src={getImageUrl(product.image)}
-                                alt={product.name || product.name_zh || product.name_en || "Product"}
+                                alt={
+                                  product.name ||
+                                  product.name_zh ||
+                                  product.name_en ||
+                                  "Product"
+                                }
                                 className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                               />
                             ) : (
@@ -281,7 +287,9 @@ const ImageManager = () => {
                               />
                             ) : (
                               <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                <span className="text-gray-400 text-xs">无图</span>
+                                <span className="text-gray-400 text-xs">
+                                  无图
+                                </span>
                               </div>
                             )}
                           </div>

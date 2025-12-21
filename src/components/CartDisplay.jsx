@@ -9,34 +9,53 @@ const CartDisplay = () => {
   // 根据语言获取产品名称
   const getProductName = (product) => {
     if (language === "zh") {
-      return product.name_zh || product.name_en || product.name || t("products.noData");
+      return (
+        product.name_zh ||
+        product.name_en ||
+        product.name ||
+        t("products.noData")
+      );
     } else {
-      return product.name_en || product.name_zh || product.name || t("products.noData");
+      return (
+        product.name_en ||
+        product.name_zh ||
+        product.name ||
+        t("products.noData")
+      );
     }
   };
 
   // 根据语言获取产品描述
   const getProductDescription = (product) => {
     if (language === "zh") {
-      return product.description_zh || product.description_en || product.description || "";
+      return (
+        product.description_zh ||
+        product.description_en ||
+        product.description ||
+        ""
+      );
     } else {
-      return product.description_en || product.description_zh || product.description || "";
+      return (
+        product.description_en ||
+        product.description_zh ||
+        product.description ||
+        ""
+      );
     }
   };
 
   // 格式化价格和单位显示
   const formatPriceWithUnit = (product) => {
     let price = product.price || "";
-    
+
     // 处理"询价"的翻译
     if (price === "询价" || price === "Inquiry") {
-      price = language === "zh" ? "询价" : "Inquiry";
+      price = language === "zh" ? "询价" : "MP";
     }
-    
-    const unit = language === "zh" 
-      ? (product.unit_zh || "") 
-      : (product.unit_en || "");
-    
+
+    const unit =
+      language === "zh" ? product.unit_zh || "" : product.unit_en || "";
+
     if (unit) {
       return `${price} / ${unit}`;
     }

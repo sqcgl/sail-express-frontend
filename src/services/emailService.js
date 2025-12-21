@@ -8,7 +8,7 @@ const EMAILJS_CONFIG = {
   PUBLIC_KEY: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "TbjT6n2_nnUAvsSbf",
 };
 
-// 发送询价邮件
+// 发送MP邮件
 export const sendInquiryEmail = async (formData, selectedProducts) => {
   try {
     // 准备邮件内容
@@ -34,7 +34,7 @@ export const sendInquiryEmail = async (formData, selectedProducts) => {
 
     return {
       success: true,
-      message: "询价邮件发送成功！",
+      message: "MP邮件发送成功！",
       data: response,
     };
   } catch (error) {
