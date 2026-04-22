@@ -1,4 +1,2 @@
-# SPA路由重定向配置
-# 确保所有路由都重定向到index.html，让React Router处理客户端路由
+/*    /index.html   200
 
-/*    /index.html   200 
