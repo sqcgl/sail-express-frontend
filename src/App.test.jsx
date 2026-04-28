@@ -32,8 +32,10 @@ function installMatchMedia(matches) {
 describe("App page navigation", () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.stubEnv("VITE_SITE_PASSWORD", "");
     installMatchMedia(false);
     window.history.replaceState(null, "", "/");
+    window.sessionStorage.clear();
     vi.spyOn(window, "scrollTo").mockImplementation(() => {});
   });
 
@@ -43,7 +45,58 @@ describe("App page navigation", () => {
     });
     vi.useRealTimers();
     cleanup();
+    vi.unstubAllEnvs();
     vi.restoreAllMocks();
+  });
+
+  it("requires the configured password before rendering the site", () => {
+    vi.stubEnv("VITE_SITE_PASSWORD", "open-sesame");
+
+    render(<App />);
+
+    expect(screen.getByRole("heading", { name: "Private access" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Password")).toHaveAttribute("type", "password");
+    expect(
+      screen.queryByRole("main", { name: "Sail Express restaurant wholesale story" }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("navigation", { name: "Primary" })).not.toBeInTheDocument();
+  });
+
+  it("unlocks the site with the correct password and remembers the session", () => {
+    vi.stubEnv("VITE_SITE_PASSWORD", "open-sesame");
+
+    const { unmount } = render(<App />);
+
+    act(() => {
+      fireEvent.change(screen.getByLabelText("Password"), {
+        target: { value: "wrong-password" },
+      });
+      fireEvent.submit(screen.getByRole("button", { name: "Enter" }).closest("form"));
+    });
+
+    expect(screen.getByRole("alert")).toHaveTextContent("Incorrect password.");
+    expect(
+      screen.queryByRole("main", { name: "Sail Express restaurant wholesale story" }),
+    ).not.toBeInTheDocument();
+
+    act(() => {
+      fireEvent.change(screen.getByLabelText("Password"), {
+        target: { value: "open-sesame" },
+      });
+      fireEvent.submit(screen.getByRole("button", { name: "Enter" }).closest("form"));
+    });
+
+    expect(
+      screen.getByRole("main", { name: "Sail Express restaurant wholesale story" }),
+    ).toBeInTheDocument();
+
+    unmount();
+    render(<App />);
+
+    expect(
+      screen.getByRole("main", { name: "Sail Express restaurant wholesale story" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Private access" })).not.toBeInTheDocument();
   });
 
   it("switches from the homepage to the corrected About page", () => {

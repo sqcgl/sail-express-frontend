@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import ScrollytellingHome from "./components/homepage/ScrollytellingHome";
+import PasswordGate from "./PasswordGate";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import ProductsPage from "./pages/ProductsPage";
@@ -18,6 +19,10 @@ function getInitialPage() {
   if (typeof window === "undefined") return "home";
   const hashPage = window.location.hash.replace("#", "");
   return Object.hasOwn(pages, hashPage) ? hashPage : "home";
+}
+
+function getConfiguredSitePassword() {
+  return import.meta.env.VITE_SITE_PASSWORD ?? "";
 }
 
 function SiteSwitcher({ activePage, onNavigate }) {
@@ -68,7 +73,7 @@ export default function App() {
   };
 
   return (
-    <>
+    <PasswordGate password={getConfiguredSitePassword()}>
       <SiteSwitcher activePage={activePage} onNavigate={navigate} />
       <div
         className={`page-shell ${isTransitioning ? "page-shell--transitioning" : ""}`}
@@ -88,6 +93,6 @@ export default function App() {
           </div>
         ))}
       </div>
-    </>
+    </PasswordGate>
   );
 }
