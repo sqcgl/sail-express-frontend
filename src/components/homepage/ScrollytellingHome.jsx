@@ -1,4 +1,5 @@
 import { supplyChainScenes } from "../../data/supplyChainScenes";
+import { featuredProducts } from "../../data/products";
 import ProgressRail from "./ProgressRail";
 import SceneLayer from "./SceneLayer";
 import { useScrollProgress } from "./useScrollProgress";
@@ -42,14 +43,38 @@ function JourneySummary() {
     <section className="summary-band" aria-label="Sail Express promise">
       <div>
         <p className="summary-band__eyebrow">Sail Express Wholesale</p>
-        <h2>Seafood, ingredients, and restaurant supplies in one route.</h2>
+        <h2>From weekly list to refrigerated route, one wholesale workflow.</h2>
       </div>
       <p>
-        From New York receiving to refrigerated delivery, we help Japanese
-        restaurants restock seafood alongside sauces, dry goods, packaging, and
-        daily service supplies.
+        Restaurants send the full list, Sail Express confirms availability and
+        substitutions, assembles the order in Queens, then delivers the mix by
+        refrigerated route.
       </p>
       <a href="mailto:info@sail-express.com">Plan your order</a>
+    </section>
+  );
+}
+
+function FeaturedProducts() {
+  return (
+    <section className="featured-products" aria-label="Featured wholesale products">
+      <div className="featured-products__intro">
+        <p className="summary-band__eyebrow">Featured Products</p>
+        <h2>Add the staples your next order needs.</h2>
+        <a href="#products">View catalog</a>
+      </div>
+      <div className="featured-products__grid">
+        {featuredProducts.map((product) => (
+          <article className="featured-product" key={product.id}>
+            <img src={product.image} alt="" />
+            <div>
+              <p>{product.subcategory}</p>
+              <h3>{product.name}</h3>
+              <span>{product.pack}</span>
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }
@@ -100,6 +125,7 @@ export default function ScrollytellingHome() {
       </div>
 
       <JourneySummary />
+      <FeaturedProducts />
     </main>
   );
 }

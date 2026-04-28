@@ -1,10 +1,15 @@
+import { useEffect } from "react";
 import ScrollytellingHome from "./components/homepage/ScrollytellingHome";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import ProductsPage from "./pages/ProductsPage";
+import WhyUsPage from "./pages/WhyUsPage";
 import { usePageTransition } from "./usePageTransition";
 
 const pages = {
   home: "Home",
+  products: "Products",
+  why: "Why Us",
   about: "About Us",
   contact: "Contact",
 };
@@ -19,15 +24,18 @@ function SiteSwitcher({ activePage, onNavigate }) {
   return (
     <nav className="site-switcher" aria-label="Primary">
       {Object.entries(pages).map(([page, label]) => (
-        <button
+        <a
           aria-current={activePage === page ? "page" : undefined}
           className="site-switcher__button"
+          href={page === "home" ? "/" : `#${page}`}
           key={page}
-          onClick={() => onNavigate(page)}
-          type="button"
+          onClick={(event) => {
+            event.preventDefault();
+            onNavigate(page);
+          }}
         >
           {label}
-        </button>
+        </a>
       ))}
     </nav>
   );
@@ -38,8 +46,23 @@ export default function App() {
     getInitialPage(),
   );
 
+  useEffect(() => {
+    const handlePageAddressChange = () => {
+      navigate(getInitialPage(), { updateUrl: false });
+    };
+
+    window.addEventListener("hashchange", handlePageAddressChange);
+    window.addEventListener("popstate", handlePageAddressChange);
+    return () => {
+      window.removeEventListener("hashchange", handlePageAddressChange);
+      window.removeEventListener("popstate", handlePageAddressChange);
+    };
+  }, [navigate]);
+
   const renderPage = (page) => {
     if (page === "home") return <ScrollytellingHome />;
+    if (page === "products") return <ProductsPage />;
+    if (page === "why") return <WhyUsPage />;
     if (page === "about") return <AboutPage />;
     return <ContactPage />;
   };

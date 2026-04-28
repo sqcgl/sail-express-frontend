@@ -14,28 +14,49 @@ describe("ScrollytellingHome", () => {
     vi.restoreAllMocks();
   });
 
-  it("renders the six-stage supply-chain story", () => {
+  it("renders the four-stage restaurant order workflow story", () => {
     render(<ScrollytellingHome />);
 
-    expect(supplyChainScenes).toHaveLength(6);
+    expect(supplyChainScenes).toHaveLength(4);
     expect(screen.getByRole("main")).toHaveAttribute(
       "aria-label",
       "Sail Express restaurant wholesale story",
     );
-    expect(screen.getAllByTestId("scene-photo")).toHaveLength(6);
+    expect(screen.getAllByTestId("scene-photo")).toHaveLength(4);
     expect(document.querySelector(".motif")).toBeNull();
     expect(document.querySelector(".story-grain")).toBeNull();
     expect(supplyChainScenes.every((scene) => scene.photo.startsWith("/generated/"))).toBe(
       true,
     );
+    expect(new Set(supplyChainScenes.map((scene) => scene.photo)).size).toBe(4);
+    expect(
+      screen.getByRole("heading", {
+        name: "Send the full list your kitchen needs restocked.",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Seafood, frozen items, sauces, rice, packaging, and daily supplies start as one restaurant order list.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Featured Products")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: "From weekly list to refrigerated route, one wholesale workflow.",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: "Add the staples your next order needs.",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("KOSHI HIKARI RICE")).toBeInTheDocument();
 
     for (const scene of [
-      "Sourcing Network",
-      "Inbound Flow",
-      "Cold Handling",
-      "New York Facility",
-      "Refrigerated Truck",
-      "Restaurant Delivery",
+      "Restaurant List",
+      "Availability Check",
+      "Facility Assembly",
+      "Cold Route Delivery",
     ]) {
       expect(screen.getByText(scene)).toBeInTheDocument();
     }
@@ -84,7 +105,7 @@ describe("ScrollytellingHome", () => {
     });
 
     expect(
-      screen.getByRole("heading", { name: "Queens turns lists into loaded orders." }),
+      screen.getByRole("heading", { name: "Queens turns the approved list into one loaded order." }),
     ).toBeInTheDocument();
   });
 });

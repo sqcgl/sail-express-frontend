@@ -17,6 +17,19 @@ export function usePageTransition(initialPage) {
   const [exitingPage, setExitingPage] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const timeoutRef = useRef(null);
+  const pageStateRef = useRef({
+    activePage: initialPage,
+    enteringPage: null,
+    visiblePage: initialPage,
+  });
+
+  useEffect(() => {
+    pageStateRef.current = {
+      activePage,
+      enteringPage,
+      visiblePage,
+    };
+  }, [activePage, enteringPage, visiblePage]);
 
   const clearTransition = useCallback(() => {
     if (timeoutRef.current === null) return;
@@ -38,16 +51,29 @@ export function usePageTransition(initialPage) {
   useEffect(() => clearTransition, [clearTransition]);
 
   const navigate = useCallback(
-    (page) => {
-      const currentTarget = enteringPage ?? visiblePage;
-      if (page === currentTarget) return;
+    (page, options = {}) => {
+      const { updateUrl = true } = options;
+      const {
+        activePage: currentActivePage,
+        enteringPage: currentEnteringPage,
+        visiblePage: currentVisiblePage,
+      } = pageStateRef.current;
+      const currentTarget = currentEnteringPage ?? currentVisiblePage;
+      if (page === currentTarget) {
+        if (page !== currentActivePage) {
+          startTransition(() => {
+            setActivePage(page);
+          });
+        }
+        return;
+      }
 
       startTransition(() => {
         setActivePage(page);
       });
 
-      if (typeof window !== "undefined") {
-        window.history.replaceState(null, "", page === "home" ? "/" : `#${page}`);
+      if (typeof window !== "undefined" && updateUrl) {
+        window.history.pushState(null, "", page === "home" ? "/" : `#${page}`);
         window.scrollTo({ top: 0, behavior: "auto" });
       }
 
@@ -65,7 +91,7 @@ export function usePageTransition(initialPage) {
         finishTransition(page);
       }, PAGE_TRANSITION_MS);
     },
-    [clearTransition, enteringPage, finishTransition, visiblePage],
+    [clearTransition, finishTransition],
   );
 
   const layers = isTransitioning

@@ -54,7 +54,7 @@ describe("App page navigation", () => {
     ).toBeInTheDocument();
 
     act(() => {
-      fireEvent.click(screen.getByRole("button", { name: "About Us" }));
+      fireEvent.click(screen.getByRole("link", { name: "About Us" }));
     });
 
     expect(
@@ -70,11 +70,36 @@ describe("App page navigation", () => {
     ).toBeInTheDocument();
   });
 
+  it("switches to Products and Why Us pages", () => {
+    render(<App />);
+
+    act(() => {
+      fireEvent.click(screen.getByRole("link", { name: "Products" }));
+    });
+
+    expect(
+      screen.getByRole("heading", {
+        name: "A wholesale catalog built for Japanese restaurant service.",
+      }),
+    ).toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(TRANSITION_MS + 20);
+      fireEvent.click(screen.getByRole("link", { name: "Why Us" }));
+    });
+
+    expect(
+      screen.getByRole("heading", {
+        name: "Why restaurants build their weekly list around Sail Express.",
+      }),
+    ).toBeInTheDocument();
+  });
+
   it("renders outgoing and incoming page layers while a transition is running", () => {
     render(<App />);
 
     act(() => {
-      fireEvent.click(screen.getByRole("button", { name: "About Us" }));
+      fireEvent.click(screen.getByRole("link", { name: "About Us" }));
     });
 
     const shell = screen.getByTestId("page-shell");
@@ -102,7 +127,7 @@ describe("App page navigation", () => {
     render(<App />);
 
     act(() => {
-      fireEvent.click(screen.getByRole("button", { name: "Contact" }));
+      fireEvent.click(screen.getByRole("link", { name: "Contact" }));
     });
 
     expect(
@@ -116,13 +141,68 @@ describe("App page navigation", () => {
     expect(screen.getByText("Receive one wholesale route")).toBeInTheDocument();
   });
 
+  it("responds to hash changes from in-page links", () => {
+    render(<App />);
+
+    act(() => {
+      window.location.hash = "#products";
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    });
+
+    expect(
+      screen.getByRole("heading", {
+        name: "A wholesale catalog built for Japanese restaurant service.",
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("loads Products directly from the initial hash", () => {
+    window.history.replaceState(null, "", "/#products");
+
+    render(<App />);
+
+    expect(
+      screen.getByRole("heading", {
+        name: "A wholesale catalog built for Japanese restaurant service.",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Products" })).toHaveAttribute(
+      "href",
+      "#products",
+    );
+  });
+
+  it("keeps the active nav in sync when browser history returns during a transition", () => {
+    window.history.replaceState(null, "", "/#products");
+    render(<App />);
+
+    act(() => {
+      fireEvent.click(screen.getByRole("link", { name: "Why Us" }));
+    });
+
+    expect(screen.getByRole("link", { name: "Why Us" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+
+    act(() => {
+      window.history.replaceState(null, "", "/#products");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    });
+
+    expect(screen.getByRole("link", { name: "Products" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+  });
+
   it("skips animated transitions when reduced motion is enabled", () => {
     installMatchMedia(true);
 
     render(<App />);
 
     act(() => {
-      fireEvent.click(screen.getByRole("button", { name: "Contact" }));
+      fireEvent.click(screen.getByRole("link", { name: "Contact" }));
     });
 
     expect(screen.getByTestId("page-shell")).toHaveAttribute(
